@@ -1,33 +1,29 @@
 /**
- * 学习路径推荐器 — 纯 JS 实现
- * 点击角色按钮 → 动态显示对应的学习路线
+ * 学习路径推荐器 — 事件委托实现
+ * 不依赖 DOMContentLoaded，兼容 MkDocs Material instant navigation
  */
-document.addEventListener('DOMContentLoaded', function () {
-  var finder = document.querySelector('.path-finder');
-  if (!finder) return;
+(function () {
+  document.addEventListener('click', function (e) {
+    // 找到最近的 [data-role] 按钮
+    var btn = e.target.closest('[data-role]');
+    if (!btn) return;
 
-  var buttons = finder.querySelectorAll('[data-role]');
-  var resultPanel = finder.querySelector('.path-result');
-  if (!resultPanel) return;
+    var finder = btn.closest('.path-finder');
+    if (!finder) return;
 
-  // All result divs — initially hidden
-  var results = resultPanel.querySelectorAll('[data-result]');
+    var role = btn.getAttribute('data-role');
 
-  buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var role = this.getAttribute('data-role');
+    // 按钮激活态
+    var buttons = finder.querySelectorAll('[data-role]');
+    buttons.forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
 
-      // Toggle active class on buttons
-      buttons.forEach(function (b) { b.classList.remove('active'); });
-      this.classList.add('active');
-
-      // Show/hide result
-      results.forEach(function (r) {
-        r.style.display = r.getAttribute('data-result') === role ? 'block' : 'none';
-      });
-
-      // Show result panel with transition
-      resultPanel.style.display = 'block';
+    // 显示对应的结果
+    var panel = finder.querySelector('.path-result');
+    var results = panel.querySelectorAll('[data-result]');
+    results.forEach(function (r) {
+      r.style.display = r.getAttribute('data-result') === role ? 'block' : 'none';
     });
+    panel.style.display = 'block';
   });
-});
+})();
