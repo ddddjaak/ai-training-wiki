@@ -1,5 +1,5 @@
-site_name: "芯片工程师 AI 实战手册"
-site_description: "面向芯片工程师的 Claude Code + ae-skills 培训文档"
+site_name: "解决方案中心 - AI Center"
+site_description: "面向 AE / SE 工程师的 Claude Code + ae-skills / se-skills 实战指南"
 repo_name: ddddjaak/ai-training-wiki
 repo_url: https://github.com/ddddjaak/ai-training-wiki
 
@@ -65,7 +65,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/ddddjaak/ai-training-wiki
 
-copyright: "© 2026 芯片工程师 AI 实战手册 · Powered by MkDocs Material"
+copyright: "© 2026 解决方案中心 · Powered by MkDocs Material"
 
 nav:
   - 首页: index.md
@@ -113,7 +113,7 @@ nav:
       - 3-12 documentation-and-adrs: M3-AE实战/3-12-documentation-and-adrs.md
       - 3-13 shipping-and-launch: M3-AE实战/3-13-shipping-and-launch.md
       - 3-14 环境配置详解: M3-AE实战/3-14-环境配置详解.md
-  - M4 SE 实战（V2 预告）:
+  - M4 SE 实战:
       - M4 路径入口: M4-SE实战/README.md
       - 4-0 SE 路径入口: M4-SE实战/4-0-路径入口.md
       - 4-1 se-requirements: M4-SE实战/4-1-se-requirements.md

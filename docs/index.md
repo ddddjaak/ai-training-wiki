@@ -4,13 +4,13 @@ hide:
   - toc
 ---
 
-# 👋 芯片工程师 AI 实战手册
+# 👋 解决方案中心 - AI Center
 
 <div class="hero" markdown>
 
 ## 从 "AI 能帮我写代码吗" 到 "没有 AI 我不会工作了"
 
-这份手册面向 **AE 工程师 / 嵌入式工程师 / 系统工程师**，教你用 Claude Code + ae-skills / se-skills 把 AI 嵌入芯片开发的每一个环节——从理解客户需求到交付方案文档。
+这份指南面向 **AE 工程师** 和 **SE 工程师**，教你用 Claude Code + ae-skills / se-skills 把 AI 嵌入芯片开发的每一个环节——从理解客户需求到交付方案文档。
 
 </div>
 
@@ -34,17 +34,17 @@ hide:
 
     跳到 [M2 能力扩展](M2-能力扩展/README.md)，Plan Mode / Workflow / Memory / 斜杠命令全部在这
 
--   **:material-bug: 我想知道每天的工作怎么用 AI 提效**
+-   **:material-bug: 我是 AE 工程师**
 
     ---
 
     直接看 [M3 AE 实战](M3-AE实战/README.md)，从 interview-me 开始走完整工作流
 
--   **:material-account-group: 我是培训讲师**
+-   **:material-file-document: 我是 SE 工程师**
 
     ---
 
-    每页都是屏幕共享脚本，按左侧导航顺序走，每 25 分钟一个节奏点
+    跳到 [M4 SE 实战](M4-SE实战/README.md)，需求分解 → 架构设计 → 规格编写 → 设计审查 → 追溯矩阵 → 发布审查
 
 </div>
 
@@ -57,11 +57,10 @@ hide:
 | **Claude Code 怎么用** | 安装、对话、命令、权限、IDE 集成（M1，9 篇） |
 | **怎么把价值拉到最大** | 55+ 斜杠命令、Plan & Goal Mode、Workflow 多Agent编排、Memory 记忆、MCP 插件、Hooks 自动化、权限管理（M2，15 篇） |
 | **日常开发怎么提效** | 从 interview-me 澄清需求 → spec-driven 写规格 → TDD 写代码 → code-review 审查 → debugging 排查 → shipping 交付（M3，15 篇） |
-| **SE 系统设计流程** | 需求分解 → 架构设计 → 规格编写 → 设计审查 → 追溯矩阵 → 发布审查（M4，11 篇，V2 上线） |
+| **SE 系统设计流程** | 需求分解 → 架构设计 → 规格编写 → 设计审查 → 追溯矩阵 → 发布审查（M4，11 篇） |
 
 ## 🎯 设计原则
 
-- **双重模式**：每页可以当讲师屏幕共享脚本讲，也可以当学员课后自查资料读
 - **芯片场景优先**：所有示例用嵌入式 / 芯片开发的真实场景——ISR 审查、I2C 调试、寄存器配置、RTOS 任务设计
 - **卡点优先**：每个配置页带 ≥3 个常见卡点 + 具体自救命令
 - **内网可用**：所有内容原创内化，不依赖外部链接
@@ -70,7 +69,7 @@ hide:
 
 ## 📝 版本
 
-`v26.2`（2026 Q2）— M1 + M2 + M3 完整覆盖。SE 路径（M4）在 v2 上线。
+`v26.2`（2026 Q2）— M1 + M2 + M3 + M4 完整覆盖。
 
 ---
 

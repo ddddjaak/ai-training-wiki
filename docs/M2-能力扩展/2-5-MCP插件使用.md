@@ -593,7 +593,7 @@ AI（自动调用 ide getDiagnostics）：
 ### 演示 1：codegraph 排查调用链（3 分钟）
 
 ```
-讲师操作（屏幕共享）：
+演示（屏幕共享）：
 1. 打开一个包含多个文件的嵌入式项目
 2. 问："用 codegraph 从 main 函数查到 HAL_I2C_Init 的完整调用路径"
 3. AI 展示 codegraph_trace 的结果 → 讲师指着调用链解释：

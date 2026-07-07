@@ -79,7 +79,7 @@ return { findings: allFindings }
 
 ### 演示：并行代码审查
 
-**讲师操作**（屏幕共享，3 分钟）：
+**演示**（屏幕共享，3 分钟）：
 
 ```
 1. 说："帮我写一个 workflow，并行审查 i2c_driver.c 和 power_mgr.c"

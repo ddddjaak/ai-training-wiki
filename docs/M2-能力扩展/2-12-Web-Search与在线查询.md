@@ -94,7 +94,7 @@ https://www.st.com/resource/en/reference_manual/rm0090-stm32f4.pdf
 
 ### 演示：查芯片参数
 
-**讲师操作**（屏幕共享，2 分钟）：
+**演示**（屏幕共享，2 分钟）：
 
 ```
 1. "搜索 STM32F407 I2C 在 Fast Mode 下的最大 SCL 频率和最小高电平保持时间"

@@ -4,9 +4,9 @@
 
 ## 项目概述
 
-这是一个为芯片工程师（嵌入式/AE/SE/工厂软件）编写的**培训 wiki**，用于学习 Claude Code 及 ae-skills / se-skills 生态系统。wiki 兼顾双重用途：**线上培训讲义脚本**（讲师屏幕共享演示）+ **课后自助查阅参考**。
+这是一个为 AE 和 SE 芯片工程师编写的**学习 wiki**，用于学习 Claude Code 及 ae-skills / se-skills 生态系统。兼顾结构化学习路径和自助查阅参考。
 
-总体规划文档为 `ai-training-wiki-for-chip-engineers.md`——其中包含所有设计决策、目录结构、页面模板、MVP 范围、培训流程及约束条件。在创建或编辑任何 wiki 页面之前，请先阅读该文档。
+总体规划文档为 `ai-training-wiki-for-chip-engineers.md`——其中包含所有设计决策、目录结构、页面模板、范围及约束条件。在创建或编辑任何 wiki 页面之前，请先阅读该文档。
 
 ## 仓库结构
 
@@ -14,49 +14,47 @@
 ai_propsal/
 ├── ai-training-wiki-for-chip-engineers.md   ← 总体规划文档（只读参考）
 ├── M1-快速上手/           ← 模块1：工具基础（9 页）
-├── M2-能力扩展/           ← 模块2：价值提取（9 页）
-├── M3-AE实战/             ← 模块3：AE 实战（16 页，嵌入式+AE，基于 ae-skills 插件）
+├── M2-能力扩展/           ← 模块2：能力扩展（15 页）
+├── M3-AE实战/             ← 模块3：AE 实战（15 页，基于 ae-skills 插件）
 ├── M4-SE实战/             ← 模块4：SE 实战（11 页，基于 se-skills 插件）
 ├── Skills-Plugins/        ← Skills 与插件参考（概要介绍、版本管理、存储）
 └── 经验之谈/              ← AI 使用方法论与经验总结
 ```
 
-## MVP 范围（当前阶段）
+## 当前范围
 
-**仅 M1 + M2 + M3（AE/嵌入式工程师）**。约 35 页，4 场培训 × 90 分钟。
+M1 + M2 + M3 + M4 四个模块全部上线。约 51 页。
 
 - M1：安装、基础使用、命令、权限、IDE 集成、衔接 skill 演示、AI 能力附录
-- M2：ae-skills 全景（26 个技能）、se-skills 全景（16 个技能）、CLAUDE.md 编写、skill 创建、MCP 插件（codegraph/context7/node_repl/memory/sequential-thinking）、hooks、并行代理、headless 模式
-- M3：AE 深化——基于 ae-skills 插件。覆盖嵌入式工程师（debugging、code-review、TDD、incremental）和 AE（interview-me、idea-refine、spec-driven、documentation、shipping）
-
-SE（M4）路径在 v2 上线。
+- M2：ae-skills 全景（26 个技能）、se-skills 全景（16 个技能）、CLAUDE.md 编写、skill 创建、MCP 插件、hooks、并行代理、headless 模式、Plan & Goal Mode、Workflow、Memory、Web Search、权限管理、斜杠命令
+- M3：AE 实战——基于 ae-skills 插件。覆盖 interview-me → idea-refine → spec-driven → TDD → incremental → code-review → debugging → shipping 完整工作流
+- M4：SE 实战——基于 se-skills 插件。覆盖 requirements → architecture → spec → design-review → code-review → test-review → traceability → release-review
 
 ## 补充目录
 
 ### Skills-Plugins/
 
-存放 skills 与 MCP 插件的参考文档，包括各 skill 的概要介绍、插件使用说明及版本管理。该目录独立于培训 wiki——wiki 教"怎么用"，这里存"是什么版本、有哪些参数"。当需要查某个 skill 的详细规格或插件 API 时，先看这里。
+存放 skills 与 MCP 插件的参考文档，包括各 skill 的概要介绍、插件使用说明及版本管理。该目录独立于 wiki——wiki 教"怎么用"，这里存"是什么版本、有哪些参数"。当需要查某个 skill 的详细规格或插件 API 时，先看这里。
 
 ### 经验之谈/
 
-汇总使用 AI（Claude Code / ae-skills / se-skills）过程中积累的方法论与实战经验。与培训 wiki 的区别：wiki 是结构化教程（按角色、按场景），经验之谈是散点式洞察（"试了 X 种方法后发现 Y 最快"）。内容随实践持续追加。
+汇总使用 AI（Claude Code / ae-skills / se-skills）过程中积累的方法论与实战经验。与 wiki 的区别：wiki 是结构化教程（按角色、按场景），经验之谈是散点式洞察（"试了 X 种方法后发现 Y 最快"）。内容随实践持续追加。
 
 ## 页面模板
 
 每个页面遵循规划文档中定义的模板（参见"页面模板"章节）。主要模板：
 
 - **M1 页面**：概述 → 快速上手（含 ⚠️常见卡点 + 🔧线上卡点自救）→ 详细说明 → 常见问题 → 下一步
-- **M2 页面**：核心价值（含 before/after）→ 全景位置 → 怎么触发 → 培训演示场景 → 下一步
-- **M3 页面**：这个 skill 做什么 → 什么时候用/不该用 → 怎么触发 → 做对了的标准是什么（成功 vs 失败输出对比）→ 常见误区 → 培训演示场景 → 进阶
+- **M2 页面**：核心价值（含 before/after）→ 全景位置 → 怎么触发 → 演示场景 → 下一步
+- **M3 页面**：这个 skill 做什么 → 什么时候用/不该用 → 怎么触发 → 做对了的标准是什么（成功 vs 失败输出对比）→ 常见误区 → 演示场景 → 进阶
 - **MCP 页面**：这个插件做什么 → 怎么使用 → 与 skill 的配合 → 常见问题
 
-每个页面必须满足**两种模式**：（1）作为讲师可屏幕共享并照读的顺序脚本；（2）作为读者可独立阅读的自学页面。
+每个页面必须满足**两种模式**：（1）作为可顺序操作的逐步指南；（2）作为读者可独立阅读的自学页面。
 
 ## 关键约束
 
+- **排错优先**——每个安装/配置步骤必须包含自助排查方案，确保工程师能独立排查问题
 - **仅限内网**——所有内容必须原创/内化，严禁从外部文档逐句复制粘贴
-- **排错优先**——每个安装/配置步骤必须包含自助排查方案，因为线上培训时讲师无法看到学员屏幕
-- **线上培训格式**：每场 ≤ 90 分钟，每 25 分钟切换节奏（演示→实操→问答），仅通过文字聊天互动
 - **wiki 为主，录屏为辅**——视频录屏随版本变更而过时；wiki 必须是持久的参考资料
 - **验证标准**——每个 M3 skill 页面必须说明"什么样的输出才算成功"，以便工程师自我验证
 - **公司环境**——工程师使用 **CC Switch** 配置公司提供的 API Key（非个人 Anthropic 账号）。安装分两步：Claude Code CLI → CC Switch → 配置 API Key → 验证。CC Switch 通过设置 `ANTHROPIC_BASE_URL` + `ANTHROPIC_AUTH_TOKEN` 环境变量生效。
@@ -123,7 +121,7 @@ M2/M3 含配置步骤的页面：每页 ≥ 3 个卡点。
 ### 双用途验证
 
 写完页面后，验证其同时适用于两种模式：
-1. **讲义脚本模式**：讲师能否在屏幕共享时按顺序朗读？是否包含时间提示？
+1. **逐步指南模式**：能否让他人按顺序逐步操作？
 2. **自学模式**：新工程师能否独立阅读并完成所有步骤？所有前置条件是否在顶部声明？
 
 ### 内容原创性

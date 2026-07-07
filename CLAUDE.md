@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-This is a **training wiki** for chip engineers (嵌入式/AE/SE/工厂软件) to learn Claude Code and the ae-skills / se-skills ecosystem. The wiki serves dual purpose: **online training lecture script** (讲师屏幕共享演示) + **post-training self-study reference** (课后自助查阅).
+This is a **learning wiki** for AE and SE chip engineers to learn Claude Code and the ae-skills / se-skills ecosystem. Serves as both a structured learning path and self-service reference.
 
-The master planning document is `ai-training-wiki-for-chip-engineers.md` — it contains all design decisions, directory structure, page templates, MVP scope, training flow, and constraints. Read it first before creating or editing any wiki page.
+The master planning document is `ai-training-wiki-for-chip-engineers.md` — it contains all design decisions, directory structure, page templates, scope, and constraints. Read it first before creating or editing any wiki page.
 
 ## Repository structure
 
@@ -14,39 +14,37 @@ The master planning document is `ai-training-wiki-for-chip-engineers.md` — it 
 ai_propsal/
 ├── ai-training-wiki-for-chip-engineers.md   ← Master planning doc (read-only reference)
 ├── M1-快速上手/           ← Module 1: Tool basics (9 pages)
-├── M2-能力扩展/           ← Module 2: Value extraction (9 pages)
-├── M3-AE实战/             ← Module 3: AE practical (16 pages, embedded + AE, powered by ae-skills plugin)
+├── M2-能力扩展/           ← Module 2: Value extraction (15 pages)
+├── M3-AE实战/             ← Module 3: AE practical (15 pages, powered by ae-skills plugin)
 ├── M4-SE实战/             ← Module 4: SE practical (11 pages, powered by se-skills plugin)
 ├── Skills-Plugins/        ← Skills & plugins reference (overviews, versions, storage)
 └── 经验之谈/              ← AI usage methodologies & lessons learned
 ```
 
-## MVP scope (current phase)
+## Current scope
 
-**Only M1 + M2 + M3 (AE/embedded engineers)**. ~35 pages total across 4 training sessions × 90min.
+M1 + M2 + M3 + M4 — all four modules are live. ~51 pages total.
 
 - M1: installation, basic usage, commands, permissions, IDE integration, bridge-to-skills demo, AI capability appendix
-- M2: ae-skills panorama (26 skills), se-skills panorama (16 skills), CLAUDE.md authoring, skill creation, MCP plugins (codegraph/context7/node_repl/memory/sequential-thinking), hooks, parallel agents, headless mode
-- M3: AE实战 — based on ae-skills plugin. Covers both embedded engineers (debugging, code-review, TDD, incremental) and AE (interview-me, idea-refine, spec-driven, documentation, shipping)
-
-SE (M4) path comes in v2.
+- M2: ae-skills panorama (26 skills), se-skills panorama (16 skills), CLAUDE.md authoring, skill creation, MCP plugins, hooks, parallel agents, headless mode, Plan & Goal Mode, Workflow, Memory, Web Search, Permissions, Slash Commands
+- M3: AE 实战 — based on ae-skills plugin. Covers interview-me → idea-refine → spec-driven → TDD → incremental → code-review → debugging → shipping workflow
+- M4: SE 实战 — based on se-skills plugin. Covers requirements → architecture → spec → design-review → code-review → test-review → traceability → release-review
 
 ## Page templates
 
 Every page follows a template defined in the planning doc (see "页面模板" section). Key templates:
 
 - **M1 pages**: 概述 → 快速上手 (with ⚠️常见卡点 + 🔧线上卡点自救) → 详细说明 → 常见问题 → 下一步
-- **M2 pages**: 核心价值 (with before/after) → 全景位置 → 怎么触发 → 培训演示场景 → 下一步
-- **M3 pages**: 这个skill做什么 → 什么时候用/不该用 → 怎么触发 → 做对了的标准是什么 (成功 vs 失败输出对比) → 常见误区 → 培训演示场景 → 进阶
+- **M2 pages**: 核心价值 (with before/after) → 全景位置 → 怎么触发 → 演示场景 → 下一步
+- **M3 pages**: 这个skill做什么 → 什么时候用/不该用 → 怎么触发 → 做对了的标准是什么 (成功 vs 失败输出对比) → 常见误区 → 演示场景 → 进阶
 - **MCP pages**: 这个插件做什么 → 怎么使用 → 与skill的配合 → 常见问题
 
-Every page must work in **two modes**: (1) as a sequential script the trainer can screen-share and follow, and (2) as a standalone self-study page someone reads later.
+Every page must work in **two modes**: (1) as a sequential walkthrough someone can follow step by step, and (2) as a standalone self-study page someone reads later.
 
 ## Critical constraints
 
+- **Troubleshoot-first** — every installation/config step must include self-service troubleshooting so engineers can debug issues independently
 - **Internal network only** — all content must be original/internalized, never copy-paste from external docs
-- **Troubleshoot-first** — every installation/config step must include self-service troubleshooting because the trainer cannot see student screens during online training
-- **Online training format**: ≤90min per session, rhythm switch every 25min (demo → hands-on → Q&A), interaction via text chat only
 - **Wiki is primary, recording is secondary** — video recordings go stale with version changes; wiki must be the durable reference
 - **Validation criteria** — every M3 skill page must state "what output counts as success" so engineers can self-verify
 - **Company environment** — engineers use **CC Switch** to configure company-provided API Keys (not personal Anthropic accounts). Installation is two-stage: Claude Code CLI → CC Switch → configure API Key → verify. CC Switch works by setting `ANTHROPIC_BASE_URL` + `ANTHROPIC_AUTH_TOKEN` environment variables.
@@ -68,7 +66,7 @@ The audience is chip engineers who read C code and register operations daily. Er
 
 ### Doubt-driven review is mandatory for technical pages
 
-The `/ae-skills:doubt-driven-development` flow caught fatal errors in 1-6 that would have destroyed training credibility:
+The `/ae-skills:doubt-driven-development` flow caught fatal errors in 1-6 that would have undermined content credibility:
 
 1. Adversarial review found: blocking ISR delay, fabricated API, wrong flag clearing, incorrect watchdog explanation
 2. All 15 actionable findings were fixed before content was finalized
@@ -113,7 +111,7 @@ Each pitfall entry must be specific enough that a stuck student can follow it wi
 ### Dual-use verification
 
 After writing a page, verify it works in both modes:
-1. **Lecture script mode**: can the trainer read it sequentially while screen-sharing? Are timing hints present?
+1. **Walkthrough mode**: can someone follow it sequentially step by step?
 2. **Self-study mode**: can a new engineer read it standalone and follow all steps? Are all prerequisites stated at the top?
 
 ### Content originality
