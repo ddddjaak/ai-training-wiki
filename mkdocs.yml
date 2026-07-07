@@ -10,18 +10,18 @@ theme:
     logo: material/chip
     repo: fontawesome/brands/github
   palette:
-    - scheme: default
-      primary: teal
-      accent: amber
-      toggle:
-        icon: material/weather-night
-        name: 暗色模式
     - scheme: slate
-      primary: teal
-      accent: amber
+      primary: deep purple
+      accent: cyan
       toggle:
         icon: material/weather-sunny
         name: 亮色模式
+    - scheme: default
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: 暗色模式
   font:
     text: ZCOOL XiaoWei
     code: Fira Code
@@ -58,6 +58,9 @@ markdown_extensions:
       permalink: true
   - attr_list
   - md_in_html
+
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   generator: false
