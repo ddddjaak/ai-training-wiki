@@ -22,25 +22,25 @@ hide:
 
 <div class="grid cards" markdown>
 
--   **:material-run-fast: 我是新手，刚装好 Claude Code**
+-   **🚀 我是新手，刚装好 Claude Code**
 
     ---
 
     从 [M1 快速上手](M1-快速上手/README.md) 开始，30 分钟学会基础用法
 
--   **:material-tools: 我已经会用，但不知道有哪些高级功能**
+-   **🧰 我已经会用，但不知道有哪些高级功能**
 
     ---
 
     跳到 [M2 能力扩展](M2-能力扩展/README.md)，Plan Mode / Workflow / Memory / 斜杠命令全部在这
 
--   **:material-bug: 我想知道每天的工作怎么用 AI 提效**
+-   **🐛 我想知道每天的工作怎么用 AI 提效**
 
     ---
 
     直接看 [M3 AE 实战](M3-AE实战/README.md)，从 interview-me 开始走完整工作流
 
--   **:material-account-group: 我是培训讲师**
+-   **👥 我是培训讲师**
 
     ---
 
