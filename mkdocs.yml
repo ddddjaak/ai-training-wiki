@@ -1,39 +1,68 @@
-site_name: "AI 培训 Wiki — 芯片工程师版"
-site_description: "面向 AE/嵌入式工程师的 Claude Code + ae-skills 培训文档"
+site_name: "芯片工程师 AI 实战手册"
+site_description: "面向芯片工程师的 Claude Code + ae-skills 培训文档"
+repo_name: ddddjaak/ai-training-wiki
+repo_url: https://github.com/ddddjaak/ai-training-wiki
+
 theme:
   name: material
   language: zh
+  icon:
+    logo: material/chip
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: 暗色模式
+    - scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: 亮色模式
+  font:
+    text: Noto Sans SC
+    code: JetBrains Mono
   features:
+    - navigation.instant
+    - navigation.tracking
     - navigation.sections
     - navigation.expand
     - navigation.top
+    - navigation.footer
     - search.suggest
     - search.highlight
+    - search.share
     - content.code.copy
-  palette:
-    - scheme: default
-      primary: indigo
-      toggle:
-        icon: material/brightness-7
-        name: 切换暗色模式
-    - scheme: slate
-      primary: indigo
-      toggle:
-        icon: material/brightness-4
-        name: 切换亮色模式
+    - content.code.annotate
+    - toc.follow
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
+  - pymdownx.snippets
   - admonition
+  - pymdownx.details
   - tables
   - footnotes
   - toc:
       permalink: true
+  - attr_list
+  - md_in_html
 
-extra_css: []
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ddddjaak/ai-training-wiki
+
+copyright: "© 2026 芯片工程师 AI 实战手册 · Powered by MkDocs Material"
 
 nav:
   - 首页: index.md
