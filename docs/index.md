@@ -4,114 +4,170 @@ hide:
   - toc
 ---
 
-# 👋 解决方案中心 - AI Center
+<div class="cyber-hero" markdown>
 
-<div class="hero" markdown>
+# :material-chip: 解决方案中心 — AI Center
 
-## 从 "AI 能帮我写代码吗" 到 "没有 AI 我不会工作了"
+<p class="hero-tagline">从 "AI 能帮我写代码吗" 到 "没有 AI 我不会工作了"</p>
 
-这份指南面向 **AE 工程师** 和 **SE 工程师**，教你用 Claude Code + ae-skills / se-skills 把 AI 嵌入芯片开发的每一个环节——从理解客户需求到交付方案文档。
+面向 **AE 工程师**和 **SE 工程师**的 Claude Code 实战指南——从安装配置到方案交付，从需求分解到发布审查，把 AI 嵌入芯片开发的每一个环节。
+
+[开始学习](M1-快速上手/README.md){ .md-button .md-button--primary }
+[GitHub :fontawesome-brands-github:](https://github.com/ddddjaak/ai-training-wiki){ .md-button }
 
 </div>
 
 ---
 
-## 🚀 快速开始
-
-你是哪种场景？
+## :material-chart-box-outline: 知识库速览
 
 <div class="grid cards" markdown>
 
--   **:material-run-fast: 我是新手，刚装好 Claude Code**
+-   :material-book-open-page-variant:{ .stat-icon } **50 篇**实战文档
 
     ---
 
-    从 [M1 快速上手](M1-快速上手/README.md) 开始，30 分钟学会基础用法
+    M1 基础 + M2 进阶 + M3 AE实战 + M4 SE实战，每篇独立可用
 
--   **:material-tools: 我已经会用，但不知道有哪些高级功能**
-
-    ---
-
-    跳到 [M2 能力扩展](M2-能力扩展/README.md)，Plan Mode / Workflow / Memory / 斜杠命令全部在这
-
--   **:material-bug: 我是 AE 工程师**
+-   :material-package-variant-closed:{ .stat-icon } **42 个** Skills
 
     ---
 
-    直接看 [M3 AE 实战](M3-AE实战/README.md)，从 interview-me 开始走完整工作流
+    ae-skills 26 个 :material-arrow-right: 嵌入式方案交付全流程  
+    se-skills 16 个 :material-arrow-right: 系统设计验证全链路
 
--   **:material-file-document: 我是 SE 工程师**
+-   :material-puzzle:{ .stat-icon } **5 个** MCP 插件
 
     ---
 
-    跳到 [M4 SE 实战](M4-SE实战/README.md)，需求分解 → 架构设计 → 规格编写 → 设计审查 → 追溯矩阵 → 发布审查
+    `drawio` · `visio` · `math` · `node_repl` · `sequential-thinking`
+
+-   :material-update:{ .stat-icon } **v26.3** 当前版本
+
+    ---
+
+    2026 Q3 发布，随 Claude Code 和 Skills 版本持续更新
 
 </div>
 
 ---
 
-## 📖 这是什么
+## :material-map: 模块总览
 
-| 你会学到 | 具体内容 |
-|---------|---------|
-| **Claude Code 怎么用** | 安装、对话、命令、权限、IDE 集成（M1，9 篇） |
-| **怎么把价值拉到最大** | 55+ 斜杠命令、Plan & Goal Mode、Workflow 多Agent编排、Memory 记忆、MCP 插件、Hooks 自动化、权限管理（M2，15 篇） |
-| **日常开发怎么提效** | 从 interview-me 澄清需求 → spec-driven 写规格 → TDD 写代码 → code-review 审查 → debugging 排查 → shipping 交付（M3，15 篇） |
-| **SE 系统设计流程** | 需求分解 → 架构设计 → 规格编写 → 设计审查 → 追溯矩阵 → 发布审查（M4，11 篇） |
+<div class="grid cards" markdown>
 
-## 🧭 不知道从哪开始？试试这个
+-   :material-rocket-launch: **M1 快速上手** · 9 篇 · ~60 min
+
+    ---
+
+    从零安装 Claude Code + CC Switch。学会基础对话、常用命令、权限管理、IDE 集成。**所有人从这里开始。**
+
+    [:material-arrow-right: 进入 M1](M1-快速上手/README.md)
+
+-   :material-tools: **M2 能力扩展** · 15 篇 · ~90 min
+
+    ---
+
+    解锁 Claude Code 的高级能力：55+ 斜杠命令、Skill 体系全景、MCP 插件、Hooks 自动化、并行代理、Plan & Goal Mode、Workflow 多 Agent 编排、Memory 记忆系统。
+
+    [:material-arrow-right: 进入 M2](M2-能力扩展/README.md)
+
+-   :material-bug-check: **M3 AE 实战** · 15 篇 · ~180 min
+
+    ---
+
+    嵌入式/AE 工程师的完整工作流：interview-me 澄清需求 → idea-refine 方案打磨 → spec-driven 规格驱动 → TDD 测试先行 → incremental 增量交付 → code-review → debugging → shipping。
+
+    [:material-arrow-right: 进入 M3](M3-AE实战/README.md)
+
+-   :material-file-document-outline: **M4 SE 实战** · 11 篇 · ~120 min
+
+    ---
+
+    系统工程师的全流程覆盖：需求分解 → 架构设计 → 详细规格 → 设计审查 → 代码静态审查 → 测试审查 → 追溯矩阵 → 发布审查 → Goal Mode 自动编排。
+
+    [:material-arrow-right: 进入 M4](M4-SE实战/README.md)
+
+</div>
+
+---
+
+## :material-compass: 不知道从哪开始？
 
 <div x-data="{ role: '', step: 'unknown' }" class="path-finder">
-  <p><strong>你的角色是什么？</strong></p>
-  <div class="path-finder-buttons">
-    <button @click="role = 'ae'; step = 'yes'" 
-            :class="role === 'ae' ? 'active' : ''"
-            class="md-button md-button--primary">
-      :material-chip: 我是 AE / 嵌入式工程师
-    </button>
-    <button @click="role = 'se'; step = 'yes'"
-            :class="role === 'se' ? 'active' : ''"
-            class="md-button md-button--primary">
-      :material-file-document: 我是 SE / 系统工程师
-    </button>
-    <button @click="role = 'new'; step = 'yes'"
-            :class="role === 'new' ? 'active' : ''"
-            class="md-button md-button--primary">
-      :material-run-fast: 我还不确定 / 刚接触
-    </button>
-  </div>
 
-  <div x-show="step === 'yes'" x-transition class="path-result">
-    <div x-show="role === 'ae'">
-      <h4>:material-playlist-check: 推荐路径</h4>
-      <p><strong>M1 快速上手</strong>（装好 Claude Code）→ <strong>M2 能力扩展</strong>（学会 skill 体系和高级功能）→ <strong>M3 AE 实战</strong>（从 interview-me 到 shipping 的完整工作流）</p>
-      <p><small>:material-clock-outline: 预计总耗时 ~5.5 小时，可分多次完成</small></p>
-    </div>
-    <div x-show="role === 'se'">
-      <h4>:material-playlist-check: 推荐路径</h4>
-      <p><strong>M1 快速上手</strong>（装好 Claude Code）→ <strong>M2 能力扩展</strong>（学会 skill 体系和高级功能）→ <strong>M4 SE 实战</strong>（需求 → 架构 → 规格 → 设计审查 → 发布）</p>
-      <p><small>:material-clock-outline: 预计总耗时 ~4.5 小时，可分多次完成</small></p>
-    </div>
-    <div x-show="role === 'new'">
-      <h4>:material-playlist-check: 推荐路径</h4>
-      <p>从 <strong>M1 快速上手</strong> 开始，装好 Claude Code 体验几天基础对话。觉得有用再看 <strong>M2 能力扩展</strong>——那里才是 Claude Code 真正拉开差距的地方。</p>
-      <p><small>:material-clock-outline: M1 约 1 小时即可完成</small></p>
-    </div>
+<p>选择你的角色，获取个性化学习路径推荐：</p>
+
+<div class="path-finder-buttons">
+  <button @click="role = 'ae'; step = 'yes'"
+          :class="role === 'ae' ? 'active' : ''"
+          class="md-button md-button--primary">
+    :material-chip: 我是 AE / 嵌入式工程师
+  </button>
+  <button @click="role = 'se'; step = 'yes'"
+          :class="role === 'se' ? 'active' : ''"
+          class="md-button md-button--primary">
+    :material-file-document: 我是 SE / 系统工程师
+  </button>
+  <button @click="role = 'new'; step = 'yes'"
+          :class="role === 'new' ? 'active' : ''"
+          class="md-button md-button--primary">
+    :material-run-fast: 我还不确定 / 刚接触
+  </button>
+</div>
+
+<div x-show="step === 'yes'" x-transition class="path-result">
+  <div x-show="role === 'ae'">
+    <h4>:material-playlist-check: 推荐路径</h4>
+    <p><strong>M1 快速上手</strong>（装好 Claude Code）→ <strong>M2 能力扩展</strong>（学会 skill 体系和高级功能）→ <strong>M3 AE 实战</strong>（从 interview-me 到 shipping 的完整工作流）</p>
+    <p><small>:material-clock-outline: 预计总耗时 ~5.5 小时，可分多次完成</small></p>
+  </div>
+  <div x-show="role === 'se'">
+    <h4>:material-playlist-check: 推荐路径</h4>
+    <p><strong>M1 快速上手</strong>（装好 Claude Code）→ <strong>M2 能力扩展</strong>（学会 skill 体系和高级功能）→ <strong>M4 SE 实战</strong>（需求 → 架构 → 规格 → 设计审查 → 发布）</p>
+    <p><small>:material-clock-outline: 预计总耗时 ~4.5 小时，可分多次完成</small></p>
+  </div>
+  <div x-show="role === 'new'">
+    <h4>:material-playlist-check: 推荐路径</h4>
+    <p>从 <strong>M1 快速上手</strong> 开始，装好 Claude Code 体验几天基础对话。觉得有用再看 <strong>M2 能力扩展</strong>——那里才是 Claude Code 真正拉开差距的地方。</p>
+    <p><small>:material-clock-outline: M1 约 1 小时即可完成</small></p>
   </div>
 </div>
 
-## 🎯 设计原则
-
-- **芯片场景优先**：所有示例用嵌入式 / 芯片开发的真实场景——ISR 审查、I2C 调试、寄存器配置、RTOS 任务设计
-- **卡点优先**：每个配置页带 ≥3 个常见卡点 + 具体自救命令
-- **内网可用**：所有内容原创内化，不依赖外部链接
+</div>
 
 ---
 
-## 📝 版本
+## :material-lightbulb-on-outline: 设计原则
 
-`v26.2`（2026 Q2）— M1 + M2 + M3 + M4 完整覆盖。
+<div class="grid cards" markdown>
+
+-   :material-cog: **芯片场景优先**
+
+    ---
+
+    所有示例用嵌入式/芯片开发的真实场景：ISR 审查、I2C 调试、寄存器配置、RTOS 任务设计。不写 To-Do App。
+
+-   :material-shield-alert: **卡点优先**
+
+    ---
+
+    每个配置页带 ≥3 个常见卡点 + 具体自救命令。工程师可独立排查，不需打断同事问"你装好了吗"。
+
+-   :material-lan: **内网可用**
+
+    ---
+
+    所有内容原创内化，不依赖外部链接。公司内网环境可直接访问，无外网也能学完核心内容。
+
+</div>
 
 ---
 
-*有问题？去 [GitHub](https://github.com/ddddjaak/ai-training-wiki) 提 Issue。*
+<div class="page-footer" markdown>
+
+**v26.3**（2026 Q3）— M1 + M2 + M3 + M4 完整覆盖 · 50 篇实战文档
+
+有问题？去 [:fontawesome-brands-github: GitHub](https://github.com/ddddjaak/ai-training-wiki) 提 Issue
+
+</div>

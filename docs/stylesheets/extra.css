@@ -39,6 +39,77 @@
   --md-text-font: "YouYuan", "幼圆", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
 }
 
+/* ---- 首页 Hero ---- */
+.cyber-hero {
+  text-align: center;
+  padding: 3.5rem 1rem 2.5rem;
+}
+
+.cyber-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+[data-md-color-scheme="slate"] .cyber-hero h1 {
+  background: linear-gradient(135deg, #b388ff, #00e5ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-md-color-scheme="default"] .cyber-hero h1 {
+  background: linear-gradient(135deg, #651FFF, #00BCD4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+[data-md-color-scheme="slate"] .hero-tagline {
+  color: #80deea;
+}
+
+[data-md-color-scheme="default"] .hero-tagline {
+  color: #651FFF;
+}
+
+.cyber-hero .md-button {
+  margin: 0.3rem;
+}
+
+/* ---- 首页页脚 ---- */
+.page-footer {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  font-size: 0.85rem;
+}
+
+[data-md-color-scheme="slate"] .page-footer {
+  color: #6a7090;
+  border-top: 1px solid rgba(103, 58, 183, 0.15);
+}
+
+[data-md-color-scheme="default"] .page-footer {
+  color: #8888a0;
+  border-top: 1px solid rgba(103, 58, 183, 0.1);
+}
+
+.page-footer a {
+  font-weight: 500;
+}
+
+/* ---- 首页统计卡片图标 ---- */
+.stat-icon {
+  font-size: 1.3rem;
+  vertical-align: middle;
+}
+
 /* ---- 代码块: 终端暗色 + 细边框辉光 ---- */
 .md-typeset pre > code {
   max-height: 500px;
