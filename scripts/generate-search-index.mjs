@@ -189,7 +189,7 @@ async function main() {
   const outDir = join(__dirname, '..', 'public', 'api');
   mkdirSync(outDir, { recursive: true });
   const outFile = join(outDir, 'search.json');
-  writeFileSync(outFile, JSON.stringify(exported));
+  writeFileSync(outFile, JSON.stringify(exported), 'utf-8');
   console.log(`Search index: ${outFile} (${JSON.stringify(exported).length} bytes)`);
 }
 
