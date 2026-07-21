@@ -1,0 +1,355 @@
+---
+title: debugging-and-error-recovery
+---
+
+
+## 这个 skill 做什么
+
+debugging-and-error-recovery 是一个系统化的调试流程——不是"AI 你帮我看一下这段代码哪里有问题"，而是一个结构化的六步法：**复现 → 隔离范围 → 定位根因 → 生成修复 → 验证修复 → 防止复发**。
+
+> **类比**：debugging skill 是你的"逻辑分析仪"（Logic Analyzer）。你不靠肉眼逐个波形排查——你把信号接上（描述症状），它帮你抓波形（读代码+日志），定位异常脉冲（根因），给出修复方案。你只需要确认"这个波形分析对不对"。
+
+---
+
+## 什么时候用 / 什么时候不该用
+
+### ✅ 应该用
+
+| 场景 | 为什么需要 debugging skill |
+|------|--------------------------|
+| 代码跑挂了，有具体现象（"I2C 读到全 0xFF"、"串口输出乱码"） | 有具体现象才能复现和隔离 |
+| 有日志或调试输出，但不知道从哪开始分析 | skill 帮你梳理因果链 |
+| 修复了一个 bug 但不确定会不会引入新问题 | skill 的"防止复发"步骤会检查边界 |
+| 看别人的代码，有一段看不懂的逻辑 | skill 从"这段代码要解决什么问题"反推 |
+
+### ❌ 不该用
+
+| 场景 | 为什么不该用 | 替代方案 |
+|------|------------|---------|
+| 代码编译不过 | 编译错误有明确的 error message，不需要调试流程 | 直接把编译错误贴给 AI |
+| "帮我写一个新功能" | debugging 是修 bug，不是写新功能 | 用 [spec-driven-development](./3-3-spec-driven-development.md) 或 [incremental-implementation](./3-7-incremental-implementation.md) |
+| "帮我优化这段代码" | 不是 bug，是改进 | 用 [code-review-and-quality](./3-9-code-review-and-quality.md) |
+| 现象太模糊（"有时候不稳定"） | skill 需要具体现象才能开始隔离 | 先加日志/监控，收集更具体的现象后再用 |
+
+---
+
+## 怎么触发
+
+debugging skill 不需要你主动说"请启动 debugging skill"。你只需要**把问题和现象描述清楚**，AI 会自动进入调试流程。
+
+### 触发方式
+
+```
+项目里有一个 bug：I2C 读 EEPROM 时偶尔返回全 0xFF，每次都是连续读几十次之后出现。HAL 返回 HAL_ERROR，错误码看起来是 AF（Acknowledge Failure）。帮我定位一下。
+```
+
+AI 收到这个描述后，会自动按以下流程推进：
+
+---
+
+### 调试六步法
+
+#### Step 1: 复现（Reproduce）
+
+AI 会先确认：**现象是可复现的吗？复现条件是什么？**
+
+```
+AI: 确认几个信息：
+1. "连续读几十次之后出现"——大概多少次？每次都是同一个次数附近吗？
+2. 出现后重新上电能恢复吗？还是必须断电重启？
+3. I2C 总线上还有其他设备吗？
+```
+
+> 💡 **你的角色**：提供现象细节。越具体越好——"偶尔失败"不如"连续读约 40-60 次后失败，失败后总线一直忙"。
+
+#### Step 2: 隔离范围（Isolate）
+
+AI 会读取相关代码，缩小可能范围：
+
+```
+AI: [读取 i2c_eeprom.c, i2c_eeprom.h, main.c 中的 I2C 初始化部分]
+    可能的原因有三个方向：
+    A. I2C 总线硬件问题（上拉电阻、布线、干扰）
+    B. EEPROM 写入周期未完成就发起下一次读
+    C. I2C 外设错误状态未正确恢复
+    
+    我们先排除 A——你确认硬件上没有改动？之前同样的硬件跑旧版固件正常？
+```
+
+> 💡 **这步的目标**：从"所有可能的原因"缩小到"2-3 个最可能的方向"。
+
+#### Step 3: 定位根因（Root Cause）
+
+AI 会深入分析最可能的方向，追踪代码逻辑：
+
+```
+AI: [深入读 HAL_I2C_Mem_Read 的调用路径]
+    我注意到 i2c_eeprom.c:72 的读取逻辑：
+
+    int32_t EEPROM_Read(uint16_t addr, uint8_t *data, uint16_t len) \&#123;
+        HAL_StatusTypeDef status;
+        uint8_t retry = 0;
+        do \&#123;
+            status = HAL_I2C_Mem_Read(&hi2c1, EEPROM_ADDR, addr,
+                                       I2C_MEMADD_SIZE_8BIT, data, len, 100);
+            if (status == HAL_OK) return 0;
+            retry++;
+        } while (retry < 3);
+        return -1;
+    }
+
+    问题在于重试策略——三次重试之间没有任何延迟。如果 EEPROM 因为内部
+    操作（如刚完成一次写操作的内部写入周期，AT24C02 最大 5ms）而暂时
+    无法响应，三次背靠背重试在微秒级内全部完成，全部失败。
+
+    根据 AT24C02 datasheet §8.2.4，内部写入周期（tWR）最大 5ms。
+    在这期间，EEPROM 不响应任何 I2C 通信（NACK 所有地址字节）。
+
+    另外，HAL_I2C_Mem_Read 在收到 NACK 后已经自动生成 STOP 条件并返回
+    HAL_ERROR——不需要手动复位 I2C 外设。标准 NACK 是正常的 I2C 协议
+    行为（从机忙、地址错误等），不是总线故障。
+    
+    需要的修复：在重试前确认 EEPROM 已就绪 + 重试间加延迟。
+```
+
+> 💡 **这步的关键**：AI 不仅告诉你"这里有问题"，还解释**为什么**——引用 datasheet 的时序参数，区分"协议行为（NACK）"和"总线故障（需硬件复位）"。
+
+#### Step 4: 生成修复（Fix）
+
+AI 生成具体的代码修复：
+
+```c
+// Before（❌ 错误：重试无延迟，EEPROM 写入周期内全部失败）
+int32_t EEPROM_Read(uint16_t addr, uint8_t *data, uint16_t len) \&#123;
+    HAL_StatusTypeDef status;
+    uint8_t retry = 0;
+    do \&#123;
+        status = HAL_I2C_Mem_Read(&hi2c1, EEPROM_ADDR, addr,
+                                   I2C_MEMADD_SIZE_8BIT, data, len, 100);
+        if (status == HAL_OK) return 0;
+        retry++;
+    } while (retry < 3);
+    return -1;
+}
+
+// After（✅ 正确：重试前确认设备就绪 + 重试间延迟）
+int32_t EEPROM_Read(uint16_t addr, uint8_t *data, uint16_t len) \&#123;
+    HAL_StatusTypeDef status;
+    uint8_t retry = 0;
+
+    while (retry < 3) \&#123;
+        // 重试前先确认 EEPROM 不在内部写入周期（ACK polling）
+        if (HAL_I2C_IsDeviceReady(&hi2c1, EEPROM_I2C_ADDR, 10, 5) != HAL_OK) \&#123;
+            retry++;
+            HAL_Delay(1);   // 等待 1ms 后再试
+            continue;
+        }
+
+        status = HAL_I2C_Mem_Read(&hi2c1, EEPROM_I2C_ADDR, addr,
+                                   I2C_MEMADD_SIZE_8BIT, data, len, 100);
+        if (status == HAL_OK) return 0;
+
+        // NACK 是正常协议行为——HAL 已自动生成 STOP
+        // 不要在这里 DeInit+Init（那是针对 BUSY 标志卡死的硬件故障）
+        retry++;
+        HAL_Delay(2);       // 给 EEPROM 时间完成内部操作
+    }
+
+    return -1;              // 三次重试后仍失败，向上层报错
+}
+```
+
+> ⚠️ **重要区分**：`HAL_I2C_ERROR_AF`（HAL 错误码，来自 `HAL_I2C_GetError()`）和 `I2C_FLAG_AF`（SR1 寄存器 bit 位，用于 `__HAL_I2C_CLEAR_FLAG()`）是**不同的值**。前者用于判断错误类型，后者用于直接操作寄存器。两者不可互换——混用会导致编译通过但逻辑错误的静默 bug。
+
+#### Step 5: 验证修复（Verify）
+
+AI 会建议验证方法：
+
+```
+AI: 验证步骤：
+1. 重新编译烧录
+2. 在 EEPROM_Write 之后立即调用 EEPROM_Read（模拟写后读场景）——
+   ACK polling 应自动等待写入周期完成，读取成功
+3. 连续读写 500 次循环——确认不再出现读失败
+4. 可选：用逻辑分析仪抓取 I2C 波形，确认 NACK 后的 STOP + 延迟 + 重试时序正确
+```
+
+#### Step 6: 防止复发（Prevent Regression）
+
+```
+AI: 建议加两个防护：
+1. 将 EEPROM_Write 的"写入完成等待"也从固定 HAL_Delay(5) 改为
+   HAL_I2C_IsDeviceReady() 轮询——通常 1-2ms 即可完成，比固定等待更快
+2. 在所有调用 HAL_I2C_Mem_Read/Write 的地方统一使用 IsDeviceReady 
+   前置检查 + 重试延迟模式——防止同一类问题在其他 I2C 操作路径上重现
+```
+
+---
+
+### 完整对话示例
+
+> ```
+你: 项目里 EEPROM 写操作后立即读偶尔返回全 0xFF。
+    HAL 返回 HAL_ERROR，错误码是 AF（Acknowledge Failure）。帮我定位。
+
+AI: 我先看一下 I2C 初始化和 EEPROM 读写的相关代码。
+    [读取 bsp/eeprom.c, bsp/i2c.c]
+
+    先确认几个细节：
+    1. 这个 EEPROM 的型号是什么？AT24C02 还是其他？
+    2. 出问题时，是"每次写后读都失败"还是"偶尔失败"？
+    3. 写入和读取之间的时间间隔多长？
+
+你: AT24C02。写后立即读的话每次都失败，但如果加个 HAL_Delay(10) 就正常。
+    EEPROM_Write 函数里现在用的是 HAL_Delay(5) 等待写入完成。
+
+AI: 问题范围缩小了。AT24C02 的内部写入周期（tWR）最大 5ms——
+    但 datasheet 里的 5ms 是最大值，实际可能在 3-7ms 之间波动
+    （取决于温度和电压）。固定 HAL_Delay(5) 有时不够。
+
+    让我看 EEPROM_Read 的重试逻辑。
+    [读取 bsp/eeprom.c 中的重试循环]
+
+    找到两处问题：
+    1. EEPROM_Write 用固定 HAL_Delay(5) 等待写入完成——
+       应该改用 HAL_I2C_IsDeviceReady() 做 ACK polling，
+       EEPROM 就绪后立即返回（通常 1-2ms），既更快又更可靠
+    2. EEPROM_Read 的重试循环没有延迟——三次重试在微秒级内全部发出，
+       如果 EEPROM 正在写周期内，全部失败。HAL 在 NACK 后已自动
+       生成 STOP 条件返回，不需要手动复位外设——需要的是重试前
+       确认设备就绪 + 重试间延迟
+
+    我已经给出了修复代码。要我直接应用吗？
+
+你: 好，帮我改。
+
+AI: [修改 bsp/eeprom.c]
+    改好了。核心改动：
+    1. EEPROM_Write: HAL_Delay(5) → HAL_I2C_IsDeviceReady() 轮询
+    2. EEPROM_Read: 重试前加 IsDeviceReady 前置检查 + 重试间 HAL_Delay(2)
+    
+    建议你做以下验证：
+    1. 写后立即读循环 500 次——确认不再出现 AF 错误
+    2. 用逻辑分析仪抓一次波形——确认 ACK polling 在设备就绪后
+       几乎立即开始传输（vs 固定 5ms 延迟每次白白等待）
+    3. 确认重试延迟（每次 2ms）不影响你的上层应用时序
+
+    要我帮你写验证测试代码吗？
+```
+
+---
+
+## 做对了的标准是什么
+
+### ✅ 成功输出
+
+| 标准 | 说明 |
+|------|------|
+| **根因找到了** | AI 指出了具体代码位置（file:line）+ 为什么这段代码在特定条件下会出错（引用硬件行为或 spec） |
+| **修复建议具体** | 修复是具体的代码 diff——不是"检查一下 I2C 配置"，而是"将 `HAL_Delay(5)` 替换为 `HAL_I2C_IsDeviceReady()` 轮询 + 重试间加 `HAL_Delay(2)`" |
+| **修复有原理支撑** | AI 解释了为什么这个修复有效——引用了寄存器行为、参考手册或 HAL 源码 |
+| **修复后测试通过** | 你按 AI 给的验证方法测试后，问题不再复现 |
+| **没有引入新问题** | 修复不影响其他功能——至少 AI 检查过调用的上游和下游 |
+
+### ❌ 失败输出（别接受这种结果）
+
+| 失败表现 | 为什么不行 | 怎么办 |
+|---------|-----------|--------|
+| "可能是 I2C 配置问题，检查一下 CubeMX 配置" | 没有定位到具体代码行——这不是 debug，是猜测 | 让 AI 读具体代码后再分析，或提供更具体的现象 |
+| "试试把时钟降一下看看" | 没有解释为什么时钟可能是原因——随手抛方案 | 追问："为什么时钟会导致这个现象？有什么证据支持？" |
+| "把这段代码重写一下" | 没有分析根因就直接重写——可能掩盖问题而不是修复 | 拒绝；要求 AI 先定位根因 |
+| 给出了通用修复但没针对你的代码 | 复制粘贴式的回答——没有读你的代码 | 确认 AI 是否读了你的代码文件（检查它是否引用了具体的函数名和行号） |
+
+---
+
+## 常见误区
+
+### 误区 1："AI 帮我 debug 就是我问它答"
+
+**现象**：你把错误日志一贴，"帮我看看"。AI 给了 5 个可能原因——第 3 个对了，但你前面已经试了 2 个不相关的。
+
+**正确做法**：debugging skill 是结构化流程，不是 Q&A。你应该让它走完整的六步法——先复现条件、再隔离范围、再定位根因。跳过步骤等于手动排错。
+
+**操作**：当 AI 跳过隔离步骤直接给答案时，追问："先帮我缩小范围——从代码逻辑看，哪几个环节最可能出问题？"
+
+### 误区 2："AI 说的根因一定对的"
+
+**现象**：AI 指出了一个"根因"，你觉得有道理，就改了。但问题还在——AI 找到的是相关代码，不是真正的根因。
+
+**正确做法**：AI 的根因分析是**假设**，需要你来验证。如果 AI 说"EEPROM 写入周期未完成导致 NACK"，你应该问自己：**这个解释能覆盖所有观察到的现象吗？** 比如如果问题是"偶尔失败"，AI 应该解释为什么是"偶尔"而不是"总是"。
+
+**操作**：对 AI 的根因分析追问："如果根因是 X，为什么现象是偶尔出现而不是每次都出现？"
+
+### 误区 3："修好了就完了"
+
+**现象**：bug 修好了，你把代码提交了。一周后同样的 bug 在另一个 I2C 设备上出现——因为只修了 EEPROM 的路径，没修其他 I2C 设备的错误处理。
+
+**正确做法**：修复步骤完成后，问 AI："这个错误模式在代码库中其他地方可能出现吗？"这防止了"打地鼠式"修 bug——同一类问题在不同模块反复出现。
+
+---
+
+---
+
+## 进阶
+
+### 与 codegraph 配合
+
+debugging skill 在"隔离范围"步骤中会自动调用 codegraph 查看调用链。你也可以主动要求：
+
+```
+用 codegraph 追踪 I2C1_EV_IRQHandler 到 EEPROM_Read 的完整调用路径，帮我确认中断处理路径上没有遗漏的错误状态检查。
+```
+
+### 与 doubt-driven-development 配合
+
+修复完成后，用 [doubt-driven-development](./3-10-doubt-driven-development.md) 对修复做对抗审查——确保修复没有引入新的边界问题：
+
+```
+用 doubt-driven-development 审查刚才的 I2C 错误恢复修复——
+重点检查：ACK polling 的超时设计是否合理？重试延迟在不同温度条件下是否足够？
+```
+
+### 何时应该用 I2C 软件复位（DeInit + Init）
+
+上面的 example 中，标准 NACK 不需要 DeInit+Init。但有一个场景确实需要：
+
+**I2C BUSY 标志卡住**（STM32F4/L4 已知 errata）：当 I2C 总线受到噪声干扰（如电机启动时的 EMI），SDA 上出现假的 START 条件——I2C 外设的 BUSY 标志（SR2 寄存器 bit 1）被硬件置位且无法通过正常 STOP 清除。此后所有 `HAL_I2C_*` 函数调用都立即返回 `HAL_BUSY`。
+
+对于这个场景，DeInit+Init（或使用 CR1 的 SWRST 位）是正确的修复：
+
+```c
+if (HAL_I2C_GetState(&hi2c1) == HAL_I2C_STATE_BUSY) \&#123;
+    // BUSY 标志卡住（errata）——执行软件复位
+    hi2c1.Instance->CR1 |= I2C_CR1_SWRST;   // 置位 SWRST
+    hi2c1.Instance->CR1 &= ~I2C_CR1_SWRST;  // 清除 SWRST
+    // 或者用完整 DeInit+Init
+}
+```
+
+**判断标准**：
+- NACK / TIMEOUT → HAL 已自动处理，加延迟重试 + ACK polling 即可
+- BUSY 标志卡住（连续 HAL_BUSY）→ 需要软件复位
+- BERR（总线错误，SDA 被意外拉低）→ 可能需要生成额外的 SCL 脉冲释放总线
+
+### 与 code-review-and-quality 配合
+
+修复涉及多个文件时，修复后触发 [code-review-and-quality](./3-9-code-review-and-quality.md) 做五维度审查——确保修复代码本身的质量。
+
+### 更多 debug 策略
+
+当 skill 的六步法不够时（如间歇性硬件问题），你可以手动指挥 AI 做更深入的分析：
+
+```
+这个问题是间歇性的，帮我设计一个诊断方案：
+1. 在错误发生时记录 I2C SR1/SR2 寄存器快照
+2. 加上时间戳记录两次连续读之间的时间间隔
+3. 分析日志找出失败的模式（是否与某个特定时间点或操作序列相关）
+```
+
+---
+
+## 下一步
+
+> **继续阅读：[3-12-documentation-and-adrs.md](./3-12-documentation-and-adrs.md)**
+>
+> 代码修好了、质量有保证了。但设计决策记录了吗？下一篇讲 documentation-and-adrs——写方案文档和架构决策记录，让未来的人和 AI 都能理解你的设计。

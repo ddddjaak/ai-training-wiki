@@ -1,0 +1,109 @@
+---
+title: Workflow 多 Agent 编排
+---
+
+
+## 核心价值
+
+| 没有 Workflow | 有 Workflow |
+|--------------|------------|
+| 审查代码：一个文件一个文件来，5 个文件 = 5 次串行对话 | 5 个文件并行审查，结果汇总——时间 = 最慢那个文件，不是 5 倍 |
+| 验证方案：自己看完代码觉得没问题 = 只有一种视角 | 3 个独立 Agent（正确性/安全/性能）同时审查——3 种视角交叉验证 |
+| 批量迁移：改了 20 个文件的 API 引用，一个个确认 | 20 个文件并行检查+修改，worktree 隔离互不干扰 |
+
+> **一句话**：Workflow 让你用确定性的 JS 脚本编排多个 Agent 并行工作——不是"让 AI 自己想怎么拆"，而是**你定义管道，AI 执行**。
+
+---
+
+## 全景位置
+
+```
+单个 Agent（基础）→ 2-7 并行代理（Promise.all 模式）
+                    → 2-10 Workflow（pipeline/parallel + 确定性脚本）
+```
+
+区别：
+- **2-7 并行代理**：手动 `agent()` 并发，适合 ad-hoc 场景
+- **Workflow**：JS 脚本定义管道（pipeline / parallel / loop-until），适合**可重复的标准化流程**
+
+---
+
+## 怎么触发
+
+### 基本语法
+
+在对话中说"用 workflow 做 XX"，或直接写一个 workflow 脚本：
+
+```javascript
+export const meta = \&#123;
+  name: 'review-changes',
+  description: 'Review changed files in parallel',
+  phases: [\&#123; title: 'Review', detail: 'parallel code review' }],
+}
+
+// 并行审查所有改动的文件
+const files = ['i2c_driver.c', 'power_mgr.c', 'sensor.c']
+const results = await parallel(
+  files.map(f => () => agent(`Review $\&#123;f} for bugs and security issues`, \&#123;
+    label: `review:$\&#123;f}`,
+    schema: \&#123; type: 'object', properties: \&#123; bugs: [], security: [] } }
+  }))
+)
+
+// 过滤空结果，汇总
+const allFindings = results.filter(Boolean).flat()
+return \&#123; findings: allFindings }
+```
+
+### 核心模式一览
+
+| 模式 | 函数 | 何时用 | 示例场景 |
+|------|------|--------|---------|
+| **并行屏障** | `parallel([...])` | 需要收集所有结果再决定下一步 | 先找出所有 bug，去重后再逐个验证 |
+| **流水线** | `pipeline(items, stage1, stage2)` | 每项独立走完所有阶段，项之间不等待 | 每个文件先 review 再 verify，文件 A verify 时文件 B 还在 review |
+| **循环收敛** | `while (条件) \&#123; agent() }` | 未知数量的迭代，直到满足条件 | 持续找 bug 直到连续 2 轮无新发现 |
+
+> **默认用 pipeline()**。只有在确实需要收集所有结果做去重/合并/早退时才用 parallel()。
+
+---
+
+## 做对了的标准
+
+| 成功 | 失败 |
+|------|------|
+| 脚本定义了清晰的 `meta`（name/description/phases） | 脚本没有 meta——运行时报错 |
+| pipeline 中项 A 在 verify 阶段时，项 B 已经在 review 阶段——无闲置 | 所有 agent 都在等最慢的那个——因为你用了 parallel() 当 barrier |
+| 输出结构化（schema），可以直接编程处理 | 输出是自然语言——你需要手动解析 |
+| 脚本可重复运行（无 Date.now()/Math.random()） | 脚本用了随机数——每次运行结果不可复现 |
+
+---
+
+## 与 ae-skills 的配合
+
+| 场景 | Workflow 模式 | 配合的 skill |
+|------|-------------|-------------|
+| 提交前全面审查 | parallel: N 个文件 × 5 维度 | code-review-and-quality |
+| 对抗式验证 | parallel: 3 个 Agent 不同视角 | doubt-driven-development |
+| 批量 bug 修复 | pipeline: 找到→修复→验证→提交 | debugging + TDD |
+| 大项目增量实现 | pipeline: 每个 task 独立实现→测试→commit | incremental-implementation |
+| 方案文档生成 | pipeline: 规格→ADR→文档 | spec-driven + documentation |
+
+---
+
+## 常见卡点
+
+| 现象 | 自救方案 |
+|------|---------|
+| Workflow script 语法错误 | Workflow 脚本是纯 JS（不是 TS）——不要写类型注解。检查是否有 `: string[]` 这样的类型标注 |
+| Agent 慢的要死，都在等 | 检查是否误用了 `parallel()` 当 barrier——如果你有 5 个 agent 在 parallel 里，都必须等最慢的那个。改用 `pipeline()` |
+| 超过了 1000 个 agent 上限 | 这是保护上限——检查是否有死循环导致无限生成 agent |
+| `Date.now()` 报错 | Workflow 禁止 `Date.now()` 和 `Math.random()`（会破坏 resume 功能）——用 `args` 传入时间戳 |
+| Agent 输出解析失败 | 使用 `schema` 参数强制结构化输出——不要依赖自然语言解析 |
+
+---
+
+## 下一步
+
+> **继续阅读：[2-11-Memory记忆系统.md](./2-11-Memory记忆系统.md)**
+>
+> Workflow 让 Agent 并行工作。但任务做完了，下次开新会话 AI 还记得吗？下一篇讲 Memory——跨会话持久化项目知识。

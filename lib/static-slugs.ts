@@ -2,10 +2,130 @@
 export const staticSlugs: string[][] = [
   [
     "ae-practice",
+    "0-路径入口"
+  ],
+  [
+    "ae-practice",
+    "1-interview-me"
+  ],
+  [
+    "ae-practice",
+    "10-doubt-driven-development"
+  ],
+  [
+    "ae-practice",
+    "11-debugging-and-error-recovery"
+  ],
+  [
+    "ae-practice",
+    "12-documentation-and-adrs"
+  ],
+  [
+    "ae-practice",
+    "13-shipping-and-launch"
+  ],
+  [
+    "ae-practice",
+    "14-环境配置详解"
+  ],
+  [
+    "ae-practice",
+    "2-idea-refine"
+  ],
+  [
+    "ae-practice",
+    "3-spec-driven-development"
+  ],
+  [
+    "ae-practice",
+    "4-planning-and-task-breakdown"
+  ],
+  [
+    "ae-practice",
+    "5-context-engineering"
+  ],
+  [
+    "ae-practice",
+    "6-test-driven-development"
+  ],
+  [
+    "ae-practice",
+    "7-incremental-implementation"
+  ],
+  [
+    "ae-practice",
+    "8-source-driven-development"
+  ],
+  [
+    "ae-practice",
+    "9-code-review-and-quality"
+  ],
+  [
+    "ae-practice",
     "index"
   ],
   [
     "ae-practice"
+  ],
+  [
+    "capabilities",
+    "0-skill体系全景图"
+  ],
+  [
+    "capabilities",
+    "1-ae-skills融入日常"
+  ],
+  [
+    "capabilities",
+    "10-Workflow多Agent编排"
+  ],
+  [
+    "capabilities",
+    "11-Memory记忆系统"
+  ],
+  [
+    "capabilities",
+    "12-Web-Search与在线查询"
+  ],
+  [
+    "capabilities",
+    "13-权限管理体系"
+  ],
+  [
+    "capabilities",
+    "14-斜杠命令速查"
+  ],
+  [
+    "capabilities",
+    "2-se-skills融入日常"
+  ],
+  [
+    "capabilities",
+    "3-CLAUDE-md怎么写"
+  ],
+  [
+    "capabilities",
+    "4-怎么创建自己的skill"
+  ],
+  [
+    "capabilities",
+    "5-MCP插件使用"
+  ],
+  [
+    "capabilities",
+    "6-Hooks自动化"
+  ],
+  [
+    "capabilities",
+    "7-并行代理"
+  ],
+  [
+    "capabilities",
+    "8-编程方式运行"
+  ],
+  [
+    "capabilities",
+    "9-Plan-Mode与Goal-Mode"
   ],
   [
     "capabilities",
@@ -55,6 +175,50 @@ export const staticSlugs: string[][] = [
   ],
   [
     "index"
+  ],
+  [
+    "se-practice",
+    "0-路径入口"
+  ],
+  [
+    "se-practice",
+    "1-se-requirements"
+  ],
+  [
+    "se-practice",
+    "10-环境配置详解"
+  ],
+  [
+    "se-practice",
+    "2-architecture-design"
+  ],
+  [
+    "se-practice",
+    "3-spec-and-detailed-design"
+  ],
+  [
+    "se-practice",
+    "4-design-review"
+  ],
+  [
+    "se-practice",
+    "5-code-static-review"
+  ],
+  [
+    "se-practice",
+    "6-test-review"
+  ],
+  [
+    "se-practice",
+    "7-traceability-matrix"
+  ],
+  [
+    "se-practice",
+    "8-release-review"
+  ],
+  [
+    "se-practice",
+    "9-se-goal"
   ],
   [
     "se-practice",

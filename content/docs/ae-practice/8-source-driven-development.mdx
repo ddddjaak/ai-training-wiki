@@ -1,0 +1,112 @@
+﻿---
+title: source-driven-development
+---
+
+
+## 这个 skill 做什么
+
+source-driven-development (SDD) 解决一个致命问题：**AI 的训练数据里存的是旧版本的 API**。当你问 AI "怎么用 HAL 库配置 I2C DMA"，AI 可能给你 HAL v1.6 的写法——但你项目用的是 HAL v1.11。API 名字变了、参数顺序变了、甚至整个函数被 deprecated 了。SDD 让 AI **在回答问题之前先查官方文档**（通过 context7 MCP），用文档确认 API 签名和用法后再回答。
+
+> **类比**：SDD 是买芯片前先查 datasheet。你不会凭记忆说"STM32 的 I2C 引脚应该是 PB6/PB7"——你会打开当前 MCU 的 datasheet 确认引脚映射。SDD 就是让 AI 也养成这个习惯：先查文档，再写代码。
+
+---
+
+## 什么时候用 / 什么时候不该用
+
+### ✅ 应该用
+
+| 场景 | 为什么 |
+|------|--------|
+| 使用第三方库（HAL/LL、FreeRTOS、LoRaMAC、LittleFS、mbedTLS 等） | 第三方库的 API 在不同版本间可能变化——AI 的训练数据可能是旧版 |
+| 使用不熟悉的 HAL 模块（如 CRC、AES、DFSDM） | 你不熟悉，很难判断 AI 给的代码是不是对的 |
+| AI 多次给出似是而非的 API 调用（编译通过但行为不对） | 这通常意味着 API 版本不对或用错了参数语义 |
+| 从老版本库迁移到新版本 | 需要确认新版本的 API 变化 |
+
+### ❌ 不该用
+
+| 场景 | 为什么不该用 | 替代方案 |
+|------|------------|---------|
+| 项目内部代码（你自己的 BSP 层） | 没有官方文档可查——SDD 查的是第三方库文档 | codegraph |
+| 标准 C 库函数（`memcpy`、`sprintf` 等） | 标准库几乎不变，不需要查文档 | — |
+| 寄存器级别的操作 | 寄存器参考手册的详细程度不适合文本 AI 解析 | 直接查 RM（Reference Manual） |
+
+---
+
+## 怎么触发
+
+SDD 通常不需要你主动触发——当 AI 引用第三方库 API 时应该自动查文档验证。但你可以明确要求：
+
+```
+用 source-driven 验证这个用法——HAL_I2C_Mem_Read 在 HAL v1.11 中的正确参数和返回值
+```
+
+或：
+
+```
+这个 FreeRTOS API 是我从旧项目复制过来的——用 context7 查一下最新版 vTaskNotifyGiveFromISR 的签名变了吗
+```
+
+### 工作流程
+
+```
+你: 帮我写一段用 LoRaMAC 库发送 Confirmed Data 的代码
+
+AI: [自动触发 source-driven]
+    1. 用 context7 查 LoRaMAC 最新文档 → 确认 API 签名
+    2. McpsConfirm 回调的参数在 LoRaMAC v4.6 中变了——
+       多了一个 McpsConfirmStatus_t 字段
+    3. 输出代码 += 标注 "基于 LoRaMAC v4.6 文档确认"
+    4. 如果 context7 中该库的文档不可用 → AI 明确声明 "未验证，基于训练数据"
+```
+
+---
+
+## 做对了的标准是什么
+
+### ✅ 成功输出
+
+| 标准 | 说明 |
+|------|------|
+| **引用了文档版本** | AI 明确标注"基于 XX 文档 vX.X 确认"，不是"应该是这样" |
+| **API 签名正确** | 编译通过、函数名/参数/返回值全部正确 |
+| **标注了未验证的 API** | 如果某个 API 文档不可用 → AI 明确声明"这个未验证" |
+| **区分了文档行为和训练数据** | AI 不会把训练数据里的 API 当作文档引用 |
+
+### ❌ 失败输出
+
+| 失败表现 | 为什么不行 | 怎么办 |
+|---------|-----------|--------|
+| AI 没查文档直接写了代码 | SDD 没有被触发或被跳过 | 明确要求："用 context7 先查文档再写" |
+| AI 给了 API 但没有标注版本 | 你无法判断这是训练数据还是最新文档 | 追问："这个 API 签名是哪个版本？你用 context7 验证了吗？" |
+| context7 查不到这个库的文档 | 不是所有库都在 context7 中有文档 | fallback：AI 用 web search 或你手动提供文档 |
+
+---
+
+## 常见误区
+
+### 误区："SDD 和 context-engineering 不是差不多吗"
+
+| | context-engineering | source-driven-development |
+|---|---|---|
+| 解决什么问题 | AI 不懂**你的项目**（MCU 型号、目录结构、规范） | AI 不懂**第三方库的最新 API** |
+| 信息来源 | CLAUDE.md + codegraph + 项目文件 | context7 / 官方文档 |
+| 适用范围 | 项目内部 | 第三方库/框架 |
+
+---
+
+---
+
+## 进阶
+
+SDD 不只适用于 API 验证——也适用于：
+- 配置参数验证（"FreeRTOSConfig.h 中的 configTICK_RATE_HZ 最新版本建议值是多少"）
+- 移植指南（"从 HAL v1.6 迁移到 v1.11，I2C 相关的 breaking changes 有哪些"）
+- 已知问题（"FreeRTOS v10.4.0 的 xQueueOverwrite 有个已知 bug——当前项目用的是这个版本吗"）
+
+---
+
+## 下一步
+
+> **继续阅读：[3-9-code-review-and-quality.md](./3-9-code-review-and-quality.md)**
+>
+> API 正确性有保证了。代码写完了，提交前需要系统化审查。下一篇讲 code-review——五维度（正确性/可读性/架构/安全/性能）审查，比肉眼扫更全面。

@@ -1,1 +1,21 @@
-{"title": "能力扩展","pages": ["index"]}
+﻿{
+  "title": "能力扩展",
+  "pages": [
+    "index",
+    "0-skill体系全景图",
+    "1-ae-skills融入日常",
+    "2-se-skills融入日常",
+    "3-CLAUDE-md怎么写",
+    "4-怎么创建自己的skill",
+    "5-MCP插件使用",
+    "6-Hooks自动化",
+    "7-并行代理",
+    "8-编程方式运行",
+    "9-Plan-Mode与Goal-Mode",
+    "10-Workflow多Agent编排",
+    "11-Memory记忆系统",
+    "12-Web-Search与在线查询",
+    "13-权限管理体系",
+    "14-斜杠命令速查"
+  ]
+}

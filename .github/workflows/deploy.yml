@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+﻿name: Deploy Fumadocs to GitHub Pages
 
 on:
   push:
@@ -10,30 +10,34 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.x'
+          node-version: "22"
+          cache: "npm"
 
-      - run: pip install mkdocs-material
+      - run: npm ci
 
-      - run: mkdocs build
+      - name: Generate static params
+        run: node scripts/generate-params.mjs
+
+      - name: Build static site
+        run: npm run build
+        env:
+          NEXT_STATIC_EXPORT: 1
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site
+          path: out
 
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4

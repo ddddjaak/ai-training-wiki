@@ -1,1 +1,21 @@
-{"title": "AE 实战","pages": ["index"]}
+﻿{
+  "title": "AE 实战",
+  "pages": [
+    "index",
+    "0-路径入口",
+    "1-interview-me",
+    "2-idea-refine",
+    "3-spec-driven-development",
+    "4-planning-and-task-breakdown",
+    "5-context-engineering",
+    "6-test-driven-development",
+    "7-incremental-implementation",
+    "8-source-driven-development",
+    "9-code-review-and-quality",
+    "10-doubt-driven-development",
+    "11-debugging-and-error-recovery",
+    "12-documentation-and-adrs",
+    "13-shipping-and-launch",
+    "14-环境配置详解"
+  ]
+}

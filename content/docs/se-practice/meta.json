@@ -1,1 +1,17 @@
-{"title": "SE 实战","pages": ["index"]}
+﻿{
+  "title": "SE 实战",
+  "pages": [
+    "index",
+    "0-路径入口",
+    "1-se-requirements",
+    "2-architecture-design",
+    "3-spec-and-detailed-design",
+    "4-design-review",
+    "5-code-static-review",
+    "6-test-review",
+    "7-traceability-matrix",
+    "8-release-review",
+    "9-se-goal",
+    "10-环境配置详解"
+  ]
+}

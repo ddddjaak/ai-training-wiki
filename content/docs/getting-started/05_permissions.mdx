@@ -24,7 +24,7 @@ Claude Code 的权限不是"开"或"关"的二元开关，而是三种模式：
 
 当你看到这样的确认框时：
 
-![截图：Claude Code 权限确认弹窗，显示 AI 准备执行的操作、Allow/Deny/Always Allow 三个按钮](screenshots/1-4-permission-prompt.png)
+> 📷 **截图**：Claude Code 权限确认弹窗（待补充截图）
 
 - 点 **Allow** = 这次允许，下次同样操作还会问
 - 点 **Always Allow** = 这次允许 + 以后同样操作都不再问（规则写入 settings.json）
@@ -38,8 +38,8 @@ Claude Code 的权限不是"开"或"关"的二元开关，而是三种模式：
 以下配置是嵌入式项目的推荐基线，可以直接复制到你的 `~/.claude/settings.json` 中：
 
 ```json
-{
-  "permissions": {
+\&#123;
+  "permissions": \&#123;
     "allow": [
       "Bash(git:*)",
       "Bash(grep:*)",

@@ -1,4 +1,4 @@
-# MkDocs
+﻿# MkDocs build
 site/
 
 # Python
@@ -13,9 +13,20 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Claude Code
-.claude/settings.local.json
-.claude/memory/
-
-# Node (if any)
+# Fumadocs / Next.js
 node_modules/
+.next/
+out/
+.npmrc
+
+# Generated search index
+public/api/
+
+# Fumadocs generated source
+.source/
+
+# Next.js types (auto-generated)
+next-env.d.ts
+
+# Claude Code
+.claude/

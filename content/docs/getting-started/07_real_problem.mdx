@@ -110,19 +110,19 @@ AI 生成修改——弹出确认框，你看到具体 diff：
 ```diff
 - while (!(I2C1->SR1 & I2C_SR1_TXE));
 + /* 主防线: 检查 NACK (AF) 标志 */
-+ if (I2C1->SR1 & I2C_SR1_AF) {
++ if (I2C1->SR1 & I2C_SR1_AF) \&#123;
 +     I2C1->SR1 &= ~I2C_SR1_AF;          /* 清除 AF 标志 */
 +     I2C1->CR1 |= I2C_CR1_STOP;         /* 发送 STOP */
 +     g_i2c1_error = HAL_ERROR;           /* 通知应用层 */
 +     return;
 + }
 + /* 次防线: 非阻塞重试计数器 */
-+ if (++txe_retry_count > I2C_TIMEOUT_MAX) {
++ if (++txe_retry_count > I2C_TIMEOUT_MAX) \&#123;
 +     I2C1->CR1 |= I2C_CR1_STOP;
 +     g_i2c1_error = HAL_TIMEOUT;
 +     return;
 + }
-+ if (!(I2C1->SR1 & I2C_SR1_TXE)) {
++ if (!(I2C1->SR1 & I2C_SR1_TXE)) \&#123;
 +     return;  /* 还没就绪, 下次 ISR 触发再检查 */
 + }
 + txe_retry_count = 0;  /* 重试成功, 重置计数器 */

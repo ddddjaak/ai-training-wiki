@@ -1,0 +1,409 @@
+---
+title: 编程方式运行（-p 模式）
+---
+
+
+## 核心价值
+
+**Before**：你每天手动打开 Claude Code 交互界面，逐条提问。CI 流水线里没有 AI——代码质量检查全靠手写的 lint 规则和 regex。你能自动检查"行长度 > 120"但不能自动检查"中断处理函数中有没有阻塞延迟"。
+
+**After**：`claude -p "提示词"` 让 AI 在命令行中以非交互模式运行——一行命令、一个输出、可以嵌入任何脚本和 CI 流水线。你可以在 PR 提交时自动触发 AI 审查，可以在构建后在日志中自动标注可疑模式，可以在发布前自动检查 "不该做的事列表"。
+
+> **类比**：交互模式是调试器（你一步步控制）。`-p` 模式是编译器的命令行模式（`gcc -c main.c`）——给定输入，产出输出，零交互。你把 AI 嵌入工具链。
+
+---
+
+## 全景位置
+
+```
+并行代理 (2-7) ──→ 编程方式运行 (2-8) ──→ M3 角色深化
+                      ↑
+                 你现在在这里
+```
+
+并行代理在交互模式下让多个 AI 同时干活。`-p` 模式让 AI 脱离交互界面，在脚本/CI 中自动运行。这是从"AI 辅助个人开发"到"AI 嵌入团队工程系统"的最后一步。
+
+---
+
+## -p 模式 vs 交互模式
+
+| 维度 | 交互模式 (`claude`) | -p 模式 (`claude -p`) |
+|------|---------------------|----------------------|
+| 启动方式 | `claude` → 进入对话界面 | `claude -p "提示词"` → 输出结果到 stdout → 退出 |
+| 交互性 | 多轮对话，人可以追问 | 单次执行，无人工干预 |
+| 权限控制 | 弹窗确认 | 需预配置工具限制（`--tools`）和权限（`--dangerously-skip-permissions`） |
+| 适用场景 | 开发过程中的探索、调试、修改 | CI 流水线、git hooks、定时任务、批处理 |
+| 输出 | 对话格式（Markdown 渲染） | stdout 文本输出（原始 Markdown，不经终端渲染，可管道/重定向） |
+| 会话持久性 | 可恢复上次对话 | 默认持久化（同目录下可累积上下文）。加 `--no-session-persistence` 确保每次独立 |
+
+---
+
+## 基本用法
+
+### 最简单的调用
+
+```bash
+claude -p "检查 src/i2c_eeprom.c 的中断处理函数中是否有阻塞延迟"
+```
+
+输出直接打印到终端。如果有问题，AI 会描述发现；如果没有，AI 会报告通过。
+
+### 常用参数
+
+```bash
+# 限制 AI 只能使用指定工具（真正限制工具集，不是权限白名单）
+# 每个工具作为独立参数传递
+claude -p "审查 PR 改动" --tools "Read" "Grep" "Glob"
+
+# 限制最大对话轮数（防止 CI 中超时，仅在 -p 模式下有效）
+claude -p "分析代码质量" --max-turns 10
+
+# 指定输出格式为 JSON（方便脚本解析）
+claude -p "列出所有使用动态内存的文件" --output-format json
+
+# 跳过权限确认（CI 环境中无人可点确认按钮）
+# ⚠️ 必须配合 --tools 限制工具范围，否则 AI 拥有不受限的全部工具权限
+claude -p "审查代码" --tools "Read" "Grep" --dangerously-skip-permissions
+```
+
+**关键区分**：
+
+| 参数 | 作用 | 典型用法 |
+|------|------|---------|
+| `--tools` | **限制可用工具集**——不在列表中的工具 AI 完全无法调用 | CI 中限制为只读工具 |
+| `--allowedTools` | **免确认白名单**——工具仍可用，但列出的工具跳过权限弹窗 | 交互模式中免确认 git 操作 |
+| `--disallowedTools` | **禁用特定工具**——从可用集中移除 | 禁止 AI 执行 `rm` 等危险操作 |
+
+> ⚠️ **最常见的安全错误**：混用 `--allowedTools` 和 `--tools`。`--allowedTools "Read,Grep"` **不会限制** AI 只能使用这两个工具——它只是让这两个工具无需确认即可使用。AI 仍然可以调用 Edit、Write、Bash 等其他工具，只是在有 `--dangerously-skip-permissions` 时会静默执行。**限制工具集必须用 `--tools`**。
+
+---
+
+## 嵌入式 CI 场景 1：PR 自动审查
+
+**场景**：每次有人提交 PR，CI 自动触发 AI 审查——检查 ISR 安全、动态内存使用、错误处理路径。不依赖人手动触发。
+
+### 脚本：`.github/workflows/ai-review.sh`
+
+```bash
+#!/bin/bash
+# PR 自动 AI 审查脚本
+# 用法: bash ai-review.sh <PR分支名> <目标分支名>
+
+PR_BRANCH=$1
+TARGET_BRANCH=$2
+
+echo "=== AI Code Review: $PR_BRANCH → $TARGET_BRANCH ==="
+
+# 获取 PR 改动的文件列表
+CHANGED_FILES=$(git diff --name-only "origin/$TARGET_BRANCH" "origin/$PR_BRANCH")
+
+if [ -z "$CHANGED_FILES" ]; then
+    echo "没有文件改动。"
+    exit 0
+fi
+
+# 只审查 C/H 文件
+C_FILES=$(echo "$CHANGED_FILES" | grep -E '\.(c|h)$')
+
+if [ -z "$C_FILES" ]; then
+    echo "没有 C/H 文件改动。"
+    exit 0
+fi
+
+# 用 Claude Code -p 模式审查改动的文件
+# --tools 限制 AI 只能使用只读工具，无法修改代码
+claude -p "审查以下改动文件的代码质量。重点检查：
+1. 中断处理函数中是否有阻塞操作（delay_us, HAL_Delay, while 忙等）
+2. 是否使用了动态内存分配（malloc/free）
+3. 所有 HAL 函数返回值是否被检查
+4. 寄存器标志位清除是否正确（REG &= ~FLAG，不是 REG = 0）
+5. 全局变量修改是否用了 volatile
+
+对于每个发现，输出格式: [file:line] 严重程度(高/中/低) 问题描述 + 修复建议
+
+如果没有发现问题，输出: ✅ 审查通过
+
+改动文件列表: $C_FILES" \
+  --tools "Read" "Grep" "Glob" \
+  --dangerously-skip-permissions \
+  --max-turns 15 \
+  | tee ai-review-report.txt
+
+echo "=== 审查完成，报告保存至 ai-review-report.txt ==="
+```
+
+### CI 配置：`.github/workflows/ai-review.yml`
+
+```yaml
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 需要完整的 git history 做 diff
+
+      - name: Run AI Code Review
+        run: bash scripts/ai-review.sh $\&#123;\&#123; github.head_ref }} $\&#123;\&#123; github.base_ref }}
+
+      - name: Post review as PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('ai-review-report.txt', 'utf8');
+            await github.rest.issues.createComment(\&#123;
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## 🤖 AI Code Review\n\n$\&#123;report}\n\n---\n*自动生成，请人工确认关键发现。*`
+            });
+```
+
+---
+
+## 嵌入式 CI 场景 2：CHANGELOG 自动生成
+
+**场景**：每次发布版本时，自动从 commit history 生成结构化的 CHANGELOG——按 feat/fix/refactor 分类，自动描述每个 commit 做了什么。
+
+### 脚本：`scripts/ai-changelog.sh`
+
+```bash
+#!/bin/bash
+# CHANGELOG 自动生成
+# 用法: bash ai-changelog.sh <上个版本的tag> <新版本号>
+
+LAST_TAG=$\&#123;1:-$(git describe --tags --abbrev=0)}
+NEW_VERSION=$\&#123;2:-"unreleased"}
+
+echo "=== 生成 CHANGELOG: $LAST_TAG → $NEW_VERSION ==="
+
+# 获取两个版本之间的所有 commit message
+COMMITS=$(git log "$LAST_TAG..HEAD" --pretty=format:"%h %s" --no-merges)
+
+if [ -z "$COMMITS" ]; then
+    echo "没有新的 commit。"
+    exit 0
+fi
+
+# 用 Claude Code -p 模式生成分类 CHANGELOG
+claude -p "根据以下 commit history，生成结构化的 CHANGELOG。
+
+要求：
+1. 按类型分组: Added（新功能）/ Fixed（修复）/ Changed（变更）/ Removed（删除）
+2. 每个条目写清楚：做了什么、影响了哪个模块
+3. 对嵌入式开发者有意义——提到具体的驱动名、外设名
+4. 语言：中文
+5. 输出 Markdown 格式
+
+Commit history:
+\`\`\`
+$COMMITS
+\`\`\`
+
+输出格式:
+## $NEW_VERSION ($(date +%Y-%m-%d))
+
+### Added
+- 描述
+
+### Fixed
+- 描述
+
+### Changed
+- 描述" \
+  --tools "Bash(git log:*)"
+
+echo "=== CHANGELOG 生成完成 ==="
+```
+
+### CI 配置：`.github/workflows/changelog.yml`
+
+```yaml
+name: Generate CHANGELOG
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate CHANGELOG
+        run: |
+          bash scripts/ai-changelog.sh > CHANGELOG.md
+          cat CHANGELOG.md
+
+      - name: Update release with CHANGELOG
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+            await github.rest.repos.updateRelease(\&#123;
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id,
+              body: changelog
+            });
+```
+
+---
+
+## 嵌入式 CI 场景 3：构建后自动标注可疑模式
+
+**场景**：每次构建完成后，AI 自动扫描编译日志和代码变更，标注可能需要人工关注的可疑模式（如"这个 warning 看起来无关紧要但可能隐藏了更大的问题"）。
+
+```bash
+#!/bin/bash
+# 构建后 AI 分析
+# 在 make 之后运行
+
+BUILD_LOG="build.log"
+
+# 捕获构建输出
+make clean && make -j8 2>&1 | tee "$BUILD_LOG"
+
+# AI 分析构建日志
+claude -p "分析以下嵌入式固件构建日志。请检查：
+1. 有哪些 warning？哪些可能隐藏严重 bug（如类型转换、未初始化变量、数组越界）
+2. 链接阶段的 section 大小——RAM 和 Flash 使用率是否接近上限
+3. 任何被丢弃的 section（如 .init_array 异常）可能指示的配置错误
+
+输出: 标注严重程度 + 具体行号 + 为什么需要关注
+
+如果一切正常，输出: ✅ 构建分析无异常
+
+构建日志:
+\`\`\`
+$(cat "$BUILD_LOG")
+\`\`\`" \
+  --tools "Read" \
+  --dangerously-skip-permissions \
+  --max-turns 5
+```
+
+---
+
+## 安全使用 -p 模式的规则
+
+| 规则 | 说明 |
+|------|------|
+| **用 `--tools` 限制工具集** | CI 中用 `--tools "Read" "Grep" "Glob"` **真正限制** AI 只能使用这些工具。不要用 `--allowedTools`（那是免确认白名单，不会限制工具范围） |
+| **CI 中跳过权限** | `--dangerously-skip-permissions` 只在无人值守环境使用，且**必须配合 `--tools`** 限制工具范围——否则 AI 拥有不受限的全部工具权限 |
+| **限制对话轮数** | `--max-turns` 防止 AI 在无限循环中消耗 CI 时间（仅在 -p 模式下有效） |
+| **不要在 -p 模式中给 AI 修改代码的权限** | CI 是检查+报告的地方，不是改代码的地方。修改应该在开发者的交互会话中完成 |
+| **AI 输出是参考，不是 gate** | CI 不应因为 AI 的审查结果而阻止 PR merge——除非你们团队明确决定要这样做。AI 的输出是给 reviewer 的辅助信息 |
+
+---
+
+## 进阶：批量自动化与容错处理
+
+以下模式适用于需要批量调用 `-p` 模式的场景（如批量验证、产线数据分析、CI 集成）。
+
+### 批量回测模式
+
+```python
+# batch_verify.py — 批量回测验证模板
+import subprocess, json, time, os
+
+def analyze_batch(batch_file, batch_index, total_batches):
+    """对一批数据调用 -p 模式分析，含容错"""
+    prompt = f"""分析 \&#123;batch_file} 中的第 \&#123;batch_index}/\&#123;total_batches} 批数据。
+输出 JSON：\&#123;\&#123;"verdict": "SAFE"|"NEEDS_REVIEW", "issues": [...]}}"""
+    
+    try:
+        result = subprocess.run([
+            'claude', '-p', prompt,
+            '--tools', 'Read',
+            '--output-format', 'json',
+            '--max-turns', '5',
+            '--no-session-persistence',
+            '--dangerously-skip-permissions'
+        ], capture_output=True, text=True, timeout=120)
+        
+        if result.returncode != 0:
+            return \&#123;"batch": batch_index, "verdict": "ERROR", 
+                    "stderr": result.stderr[:200]}
+        
+        raw = result.stdout.strip()
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            # 容错：AI 可能在 JSON 外包裹 markdown 代码块
+            if '```json' in raw:
+                return json.loads(raw.split('```json')[1].split('```')[0])
+            elif '```' in raw:
+                return json.loads(raw.split('```')[1].split('```')[0])
+            return \&#123;"batch": batch_index, "verdict": "PARSE_FAILED", "raw": raw[:500]}
+    except subprocess.TimeoutExpired:
+        return \&#123;"batch": batch_index, "verdict": "TIMEOUT"}
+
+# 主流程
+batches = [...]  # 按 200 条/批切分数据
+results = []
+for i, batch in enumerate(batches):
+    result = analyze_batch(batch, i+1, len(batches))
+    results.append(result)
+    time.sleep(0.5)  # 避免 API 限流
+
+needs_review = [r for r in results if r['verdict'] == 'NEEDS_REVIEW']
+print(f"✅ SAFE: \&#123;len(results) - len(needs_review)} 批, ⚠️ NEEDS_REVIEW: \&#123;len(needs_review)} 批")
+```
+
+### 超时与断点续跑
+
+```bash
+# 单次调用超时保护（shell 层面）
+timeout 120 claude -p "..." --tools "Read" --output-format json || echo '\&#123;"result":"TIMEOUT"}'
+```
+
+```python
+# 断点续跑——挂了从已完成批次继续
+completed = set()
+if os.path.exists('checkpoint.json'):
+    with open('checkpoint.json') as f:
+        completed = set(json.load(f))
+
+for i, batch in enumerate(batches):
+    if i in completed:
+        continue
+    result = analyze_batch(batch, i, len(batches))
+    results.append(result)
+    completed.add(i)
+    with open('checkpoint.json', 'w') as f:
+        json.dump(list(completed), f)
+```
+
+### 产线环境推荐配置
+
+```bash
+# 只读 + JSON + 无人值守的标准模板
+claude -p "分析任务描述" \
+  --tools "Read" \
+  --output-format json \
+  --max-turns 5 \
+  --no-session-persistence \
+  --dangerously-skip-permissions
+```
+
+> ⚠️ `--dangerously-skip-permissions` 必须配合 `--tools` 限制工具范围使用，避免 AI 在无人值守时执行危险操作。
+
+---
+
+## 下一步
+
+> **继续阅读：[2-9-Plan-Mode与Goal-Mode.md](./2-9-Plan-Mode与Goal-Mode.md)**
+>
+> -p 模式让 Claude Code 能嵌入 CI。下一篇讲 Plan Mode——让 AI 在执行前先出方案，避免写到一半跑偏。这是 Claude Code 最实用的内置能力之一。
