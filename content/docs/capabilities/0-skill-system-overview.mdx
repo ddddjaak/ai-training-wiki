@@ -1,0 +1,189 @@
+﻿---
+title: Skill 体系全景图
+---
+
+
+## 核心价值
+
+**Before**：你用 Claude Code 聊天——问一个问题，AI 回答。每次都要从头描述你的场景、你的代码、你的约束。效率取决于你提问的水平。
+
+**After**：你触发一个 skill——AI 自动加载这个场景的标准化流程、检查清单、输出格式。你不需要知道"该怎么问"，skill 已经内置了最佳实践。
+
+> **类比**：Claude Code 裸用像裸机 C 编程（什么都要自己写）。触发 skill 像调用 HAL 库（`HAL_I2C_Master_Transmit()` ——一个函数调用完成标准化操作，你不需要关心底层时序）。
+
+在 1-6 中，你手动走完了一个调试闭环：描述 bug → 搜索代码 → 定位根因 → 生成修复 → 编译验证 → 逻辑检查。在 skill 体系里，这个流程叫 **`debugging-and-error-recovery`**——你不需要每次都手动组织这 7 步，触发 skill 后 AI 会按标准化流程推进。
+
+这只是 42 个 skill 中的几个。下面是一览。
+
+---
+
+## 全景位置
+
+这篇是 M2 模块的第一篇——从"会用命令"到"知道该触发什么 skill"。
+
+```
+M1 工具上手 ──→ M2 价值挖掘 ──→ M3 角色深化
+                 ↑
+            你现在在这里
+```
+
+读完这篇知道有哪些 skill 后，2-1（ae-skills 日常）和 2-2（se-skills 日常）会告诉你在实际工作中怎么串起来用。
+
+---
+
+## AE Skills 全景（26 个）
+
+ae-skills 覆盖嵌入式软件开发的完整生命周期。按"先想清楚再动手 → 写完验证 → 审查后发布"的流程组织。部分 skill 有长短两种触发名（如 `/ae-skills:review` 和 `/ae-skills:code-review-and-quality` 等效）。
+
+### Define 阶段（定义）——动手前先想清楚
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `interview-me` | 一问一答帮你澄清模糊意图，像需求访谈 | ✅ 3-1 |
+| `idea-refine` | 发散→收敛，从模糊方向产出具体方案 | ✅ 3-2 |
+| `spec-driven-development`（别名 `spec`） | 先写规格（含验收条件），再按规格实现 | ✅ 3-3 |
+| `context-engineering` | 帮 AI 加载正确的项目上下文，防止幻觉 | ✅ 3-5 |
+| `source-driven-development` | 用官方文档验证代码中使用的 API 是否正确 | ✅ 3-8 |
+| `doubt-driven-development` | 对抗式审查：用全新视角找你的代码/设计有什么问题 | ✅ 3-10 |
+
+### Plan 阶段（规划）——把大任务拆成可执行的小任务
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `planning-and-task-breakdown`（别名 `plan`） | 画依赖图、拆任务、写验收条件 | ✅ 3-4 |
+
+### Build 阶段（构建）——写代码
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `incremental-implementation`（别名 `build`） | 薄垂直切片增量实现，每个切片编译通过+测试通过 | ✅ 3-7 |
+| `api-and-interface-design` | 设计稳定的嵌入式接口契约（HAL 层、驱动 API） | — |
+| `peripheral-driver-design` | 外设驱动设计：I2C/SPI/UART/GPIO，DMA/中断/轮询权衡 | — |
+| `embedded-build-and-toolchain` | 交叉编译、链接脚本、CMake/Make 多目标构建 | — |
+| `rtos-and-concurrency` | RTOS 任务设计、ISR 设计、IPC、优先级反转排查 | — |
+| `using-ae-skills` | 元技能：帮你发现和调用正确的 skill | — |
+
+### Verify 阶段（验证）——确认代码正确
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `test-driven-development`（别名 `test`） | 先写失败测试，再写让它通过的代码 | ✅ 3-6 |
+| `debugging-and-error-recovery` | 复现→定位→修复→防护，完整的调试闭环 | ✅ 3-11 |
+| `embedded-debugging` | 硬件级调试：HardFault 分析、JTAG/SWD、栈溢出检测 | — |
+
+### Review 阶段（审查）——检查质量和风险
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `code-review-and-quality`（别名 `review`） | 五轴审查：正确性/可读性/架构/安全/性能 | ✅ 3-9 |
+| `security-and-hardening` | 嵌入式安全加固：安全启动、固件签名、调试端口锁 | — |
+| `performance-optimization` | 嵌入式性能优化：栈/堆分析、中断延迟、功耗优化 | — |
+| `code-simplification`（别名 `code-simplify`） | 保持行为不变的前提下降低复杂度 | — |
+
+### Ship 阶段（发布）——交付和维护
+
+| Skill | 一句话 | M3 深度覆盖 |
+|-------|--------|-----------|
+| `git-workflow-and-versioning` | 原子提交 + 干净的 commit history | — |
+| `ci-cd-and-automation` | 嵌入式 CI/CD：交叉编译矩阵、自动化测试、HIL 集成 | — |
+| `documentation-and-adrs` | 记录"为什么"（不只是"做了什么"） | ✅ 3-12 |
+| `deprecation-and-migration` | 系统化地弃用旧接口、迁移到新接口 | — |
+| `shipping-and-launch`（别名 `ship`） | 固件发布前检查清单 + OTA 部署 + 回滚方案 | ✅ 3-13 |
+
+---
+
+## SE Skills 全景（16 个）
+
+se-skills 面向系统工程师。按"需求 → 设计 → 审查 → 追溯"的流程组织。
+
+### Define 阶段（定义需求）
+
+| Skill | 一句话 | M5 深度覆盖 |
+|-------|--------|-----------|
+| `se-requirements` | 需求分解和编写 | ✅ |
+| `requirements-decompose` | 复杂需求拆解为可管理的子需求 | ✅ |
+| `requirements-review` | 需求文档质量审查 | ✅ |
+| `spec-authoring` | 规格文档撰写 | ✅ |
+| `se-spec` | SE 规格编写 | ✅ |
+
+### Design 阶段（设计）
+
+| Skill | 一句话 | M5 深度覆盖 |
+|-------|--------|-----------|
+| `architecture-design` | 系统架构设计 | ✅ |
+| `se-architecture` | SE 视角的架构设计 | ✅ |
+| `software-architecture-design` | 软件架构设计 | ✅ |
+| `software-detailed-design` | 软件详细设计 | ✅ |
+| `hardware-architecture-design` | 硬件架构设计 | ✅ |
+| `hardware-detailed-design` | 硬件详细设计 | ✅ |
+| `algorithm-design` | 算法设计 | ✅ |
+
+### Review 阶段（审查）
+
+| Skill | 一句话 | M5 深度覆盖 |
+|-------|--------|-----------|
+| `code-static-review` | 编码规范审查 | ✅ |
+| `design-review` | 4 视角对抗审查 | ✅ |
+| `se-review` | SE 全面审查 | ✅ |
+| `release-review` | 发布前审查 | ✅ |
+| `test-plan-review` | 测试计划审查 | ✅ |
+| `test-report-review` | 测试报告审查 | ✅ |
+
+### Trace 阶段（追溯）
+
+| Skill | 一句话 | M5 深度覆盖 |
+|-------|--------|-----------|
+| `traceability-matrix` | 需求→设计→测试可追溯性矩阵 | ✅ |
+| `se-traceability` | SE 可追溯性管理 | ✅ |
+
+### Meta（元技能）
+
+| Skill | 一句话 | M5 深度覆盖 |
+|-------|--------|-----------|
+| `using-se-skills` | SE 元技能：发现和调用正确的 SE skill | ✅ |
+
+---
+
+## 其他 Skills（工具类 / 跨角色共享）
+
+| Skill | 一句话 | 覆盖位置 |
+|-------|--------|---------|
+| `markdown-to-docx` | Markdown 转 Word | M4 |
+| `mermaid-diagram-generation` | Mermaid 图表生成 | — |
+| `deep-research` | 深度研究（多源事实核查） | — |
+
+> 💡 **创建自己的 skill**：V1.0 中没有 `skill-creator` 这个独立 skill。创建自定义 skill 的方法是直接在 `.claude/skills/` 目录下编写 Markdown 文件——详见 [2-4-create-your-own-skill.md](./2-4-create-your-own-skill.md)。
+
+---
+
+## 怎么触发
+
+所有 ae-skills 和 se-skills 通过 `/` 命令触发。格式：
+
+```
+/ae-skills:<skill-name>
+/se-skills:<skill-name>
+```
+
+**示例**：
+
+```
+/ae-skills:debugging-and-error-recovery
+/ae-skills:review                    （等效于 /ae-skills:code-review-and-quality）
+/ae-skills:spec                      （等效于 /ae-skills:spec-driven-development）
+/se-skills:requirements-review
+```
+
+> 💡 V1.0 中部分高频 skill 支持短别名：`review`=`code-review-and-quality`、`spec`=`spec-driven-development`、`test`=`test-driven-development`、`build`=`incremental-implementation`、`plan`=`planning-and-task-breakdown`、`ship`=`shipping-and-launch`、`code-simplify`=`code-simplification`。长短名等效，选你顺手的用。
+
+> **原则**：你不知道有哪些 skill → 看本页全景图。你知道要做什么但不知道用哪个 skill → 用 `using-ae-skills` 或 `using-se-skills` 元技能，AI 会帮你找到正确的 skill。
+
+---
+
+## 下一步
+
+> **继续阅读：[2-1-ae-skills-daily-integration.md](./2-1-ae-skills-daily-integration.md)**
+>
+> 全景图给你了地图。下一篇教你看地图走路——AE 工程师的典型一天，每个环节触发什么 skill。
+>
+> 如果你是 SE（系统工程师），直接跳到 [2-2-se-skills-daily-integration.md](./2-2-se-skills-daily-integration.md)。

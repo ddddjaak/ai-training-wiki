@@ -2,7 +2,7 @@
 export const staticSlugs: string[][] = [
   [
     "ae-practice",
-    "0-路径入口"
+    "0-pathway-entry"
   ],
   [
     "ae-practice",
@@ -26,7 +26,7 @@ export const staticSlugs: string[][] = [
   ],
   [
     "ae-practice",
-    "14-环境配置详解"
+    "14-environment-setup"
   ],
   [
     "ae-practice",
@@ -69,63 +69,63 @@ export const staticSlugs: string[][] = [
   ],
   [
     "capabilities",
-    "0-skill体系全景图"
+    "0-skill-system-overview"
   ],
   [
     "capabilities",
-    "1-ae-skills融入日常"
+    "1-ae-skills-daily-integration"
   ],
   [
     "capabilities",
-    "10-Workflow多Agent编排"
+    "10-workflow-multi-agent-orchestration"
   ],
   [
     "capabilities",
-    "11-Memory记忆系统"
+    "11-memory-system"
   ],
   [
     "capabilities",
-    "12-Web-Search与在线查询"
+    "12-web-search-online-query"
   ],
   [
     "capabilities",
-    "13-权限管理体系"
+    "13-permission-management"
   ],
   [
     "capabilities",
-    "14-斜杠命令速查"
+    "14-slash-commands-reference"
   ],
   [
     "capabilities",
-    "2-se-skills融入日常"
+    "2-se-skills-daily-integration"
   ],
   [
     "capabilities",
-    "3-CLAUDE-md怎么写"
+    "3-claude-md-guide"
   ],
   [
     "capabilities",
-    "4-怎么创建自己的skill"
+    "4-create-your-own-skill"
   ],
   [
     "capabilities",
-    "5-MCP插件使用"
+    "5-mcp-plugin-usage"
   ],
   [
     "capabilities",
-    "6-Hooks自动化"
+    "6-hooks-automation"
   ],
   [
     "capabilities",
-    "7-并行代理"
+    "7-parallel-agents"
   ],
   [
     "capabilities",
-    "8-编程方式运行"
+    "8-programmatic-execution"
   ],
   [
     "capabilities",
-    "9-Plan-Mode与Goal-Mode"
+    "9-plan-mode-goal-mode"
   ],
   [
     "capabilities",
@@ -178,7 +178,7 @@ export const staticSlugs: string[][] = [
   ],
   [
     "se-practice",
-    "0-路径入口"
+    "0-pathway-entry"
   ],
   [
     "se-practice",
@@ -186,7 +186,7 @@ export const staticSlugs: string[][] = [
   ],
   [
     "se-practice",
-    "10-环境配置详解"
+    "10-environment-setup"
   ],
   [
     "se-practice",

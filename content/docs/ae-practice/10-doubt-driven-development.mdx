@@ -9,7 +9,7 @@ doubt-driven-development 是一个**对抗式代码审查**——它不验证你
 
 > **类比**：doubt-driven 是给你的代码请一个"故意找茬的同事"。正常 review 的同事会说"这里有个潜在问题，但总体不错"。doubt-driven 的审查者会说"既然是中断上下文，你确认这个 while 循环不会死锁吗？你确认这个 volatile 对编译器优化有效吗？你确认 HAL_I2C_DeInit 在 ISR 里重入安全吗？"——不是找优点，是找漏洞。
 
-这个 skill 的完整流程在 M2 的 [2-7-并行代理](../M2-能力扩展/2-7-并行代理.md) 中有 Workflow 脚本示例。本章聚焦于**你什么时候用、怎么用、怎么判断结果**。
+这个 skill 的完整流程在 M2 的 [2-7-parallel-agents](../M2-能力扩展/2-7-parallel-agents.md) 中有 Workflow 脚本示例。本章聚焦于**你什么时候用、怎么用、怎么判断结果**。
 
 ---
 
@@ -244,7 +244,7 @@ int32_t EEPROM_Write(uint16_t addr, const uint8_t *data, uint16_t len) \&#123;
 
 ### 审查结果的 Workflow 自动化
 
-在 M2 [2-7-并行代理](../M2-能力扩展/2-7-并行代理.md) 中有完整的 Workflow 脚本——5 维度审查 + 3 验证者对抗投票。把这个 Workflow 改为纯 doubt 模式（只怀疑、不验证）就是一个自动化的 doubt-driven 流水线。
+在 M2 [2-7-parallel-agents](../M2-能力扩展/2-7-parallel-agents.md) 中有完整的 Workflow 脚本——5 维度审查 + 3 验证者对抗投票。把这个 Workflow 改为纯 doubt 模式（只怀疑、不验证）就是一个自动化的 doubt-driven 流水线。
 
 ### 与 code-review 互补使用
 

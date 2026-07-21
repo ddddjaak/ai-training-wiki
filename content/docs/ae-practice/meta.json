@@ -2,7 +2,7 @@
   "title": "AE 实战",
   "pages": [
     "index",
-    "0-路径入口",
+    "0-pathway-entry",
     "1-interview-me",
     "2-idea-refine",
     "3-spec-driven-development",
@@ -16,6 +16,6 @@
     "11-debugging-and-error-recovery",
     "12-documentation-and-adrs",
     "13-shipping-and-launch",
-    "14-环境配置详解"
+    "14-environment-setup"
   ]
 }

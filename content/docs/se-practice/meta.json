@@ -1,8 +1,8 @@
-﻿{
+{
   "title": "SE 实战",
   "pages": [
     "index",
-    "0-路径入口",
+    "0-pathway-entry",
     "1-se-requirements",
     "2-architecture-design",
     "3-spec-and-detailed-design",
@@ -12,6 +12,6 @@
     "7-traceability-matrix",
     "8-release-review",
     "9-se-goal",
-    "10-环境配置详解"
+    "10-environment-setup"
   ]
 }
