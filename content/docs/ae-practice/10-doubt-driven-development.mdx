@@ -1,4 +1,4 @@
----
+﻿---
 title: doubt-driven-development
 ---
 
@@ -9,7 +9,7 @@ doubt-driven-development 是一个**对抗式代码审查**——它不验证你
 
 > **类比**：doubt-driven 是给你的代码请一个"故意找茬的同事"。正常 review 的同事会说"这里有个潜在问题，但总体不错"。doubt-driven 的审查者会说"既然是中断上下文，你确认这个 while 循环不会死锁吗？你确认这个 volatile 对编译器优化有效吗？你确认 HAL_I2C_DeInit 在 ISR 里重入安全吗？"——不是找优点，是找漏洞。
 
-这个 skill 的完整流程在 M2 的 [2-7-parallel-agents](../M2-能力扩展/2-7-parallel-agents.md) 中有 Workflow 脚本示例。本章聚焦于**你什么时候用、怎么用、怎么判断结果**。
+这个 skill 的完整流程在 M2 的 [2-7-parallel-agents](../capabilities/7-parallel-agents) 中有 Workflow 脚本示例。本章聚焦于**你什么时候用、怎么用、怎么判断结果**。
 
 ---
 
@@ -28,7 +28,7 @@ doubt-driven-development 是一个**对抗式代码审查**——它不验证你
 
 | 场景 | 为什么不该用 | 替代方案 |
 |------|------------|---------|
-| 刚写完第一版草稿 | doubt 是做"接近完成时的验证"——草稿阶段先让代码结构稳定 | [code-review-and-quality](./3-9-code-review-and-quality.md) |
+| 刚写完第一版草稿 | doubt 是做"接近完成时的验证"——草稿阶段先让代码结构稳定 | [code-review-and-quality](./9-code-review-and-quality) |
 | 5 行以内的简单改动 | 不值得启动对抗审查 | 肉眼检查 |
 | 已经跑过 2 轮 doubt 且没有新发现 | 满足 stop condition——不需要无限循环 | 停止，接受当前代码 |
 
@@ -244,7 +244,7 @@ int32_t EEPROM_Write(uint16_t addr, const uint8_t *data, uint16_t len) \&#123;
 
 ### 审查结果的 Workflow 自动化
 
-在 M2 [2-7-parallel-agents](../M2-能力扩展/2-7-parallel-agents.md) 中有完整的 Workflow 脚本——5 维度审查 + 3 验证者对抗投票。把这个 Workflow 改为纯 doubt 模式（只怀疑、不验证）就是一个自动化的 doubt-driven 流水线。
+在 M2 [2-7-parallel-agents](../capabilities/7-parallel-agents) 中有完整的 Workflow 脚本——5 维度审查 + 3 验证者对抗投票。把这个 Workflow 改为纯 doubt 模式（只怀疑、不验证）就是一个自动化的 doubt-driven 流水线。
 
 ### 与 code-review 互补使用
 
@@ -254,6 +254,6 @@ int32_t EEPROM_Write(uint16_t addr, const uint8_t *data, uint16_t len) \&#123;
 
 ## 下一步
 
-> **继续阅读：[3-11-debugging-and-error-recovery.md](./3-11-debugging-and-error-recovery.md)**
+> **继续阅读：[3-11-debugging-and-error-recovery.md](./11-debugging-and-error-recovery)**
 >
 > 对抗审查发现了隐藏问题。但遇到线上故障怎么系统化定位？下一篇讲 debugging——从现象到根因的系统化调试方法，覆盖常见故障模式和排查技巧。

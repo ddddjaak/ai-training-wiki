@@ -60,21 +60,21 @@ AE 工程师的工作覆盖从"理解客户问题"到"写代码解决"到"交付
 
 | 顺序 | Skill | 解决什么问题 | 如果没有它 |
 |------|-------|-------------|-----------|
-| **1** | [interview-me](./3-1-interview-me.md) | "需求太模糊，通过一问一答逐步澄清" | 你脑补了需求——做了一堆客户没要的东西 |
-| **2** | [idea-refine](./3-2-idea-refine.md) | "精炼模糊想法为可执行的方案方向" | 只有一个方向，没对比过——可能选了次优方案 |
-| **3** | [spec-driven-development](./3-3-spec-driven-development.md) | "先写规格（含验收条件）再实现" | AI 自由发挥——写出来的和你要的不一样 |
+| **1** | [interview-me](./1-interview-me) | "需求太模糊，通过一问一答逐步澄清" | 你脑补了需求——做了一堆客户没要的东西 |
+| **2** | [idea-refine](./2-idea-refine) | "精炼模糊想法为可执行的方案方向" | 只有一个方向，没对比过——可能选了次优方案 |
+| **3** | [spec-driven-development](./3-spec-driven-development) | "先写规格（含验收条件）再实现" | AI 自由发挥——写出来的和你要的不一样 |
 
 ### 阶段二：Plan（规划）—— 把规格拆成可执行的任务
 
 | 顺序 | Skill | 解决什么问题 | 前置依赖 |
 |------|-------|-------------|---------|
-| **4** | [planning-and-task-breakdown](./3-4-planning-and-task-breakdown.md) | "拆解中型任务为可执行的小块，每块有验收条件" | 3-3（spec 已完成） |
+| **4** | [planning-and-task-breakdown](./4-planning-and-task-breakdown) | "拆解中型任务为可执行的小块，每块有验收条件" | 3-3（spec 已完成） |
 
 ### 阶段三：Context（上下文）—— 让 AI 理解你的项目
 
 | 顺序 | Skill | 解决什么问题 | 前置依赖 |
 |------|-------|-------------|---------|
-| **5** | [context-engineering](./3-5-context-engineering.md) | "配置 CLAUDE.md 和项目规则——让 AI 不编造不存在的函数和寄存器" | M2 2-3（CLAUDE.md） |
+| **5** | [context-engineering](./5-context-engineering) | "配置 CLAUDE.md 和项目规则——让 AI 不编造不存在的函数和寄存器" | M2 2-3（CLAUDE.md） |
 
 > **为什么在 Implement 之前？** 在开始写任何代码之前，先让 AI 理解你的项目结构、代码风格、硬件平台。否则 AI 会发明不存在的 HAL 函数和寄存器地址。
 
@@ -82,30 +82,30 @@ AE 工程师的工作覆盖从"理解客户问题"到"写代码解决"到"交付
 
 | 顺序 | Skill | 解决什么问题 | 前置依赖 |
 |------|-------|-------------|---------|
-| **6** | [test-driven-development](./3-6-test-driven-development.md) | "测试先失败再通过——确保代码行为被验证" | 3-5 |
-| **7** | [incremental-implementation](./3-7-incremental-implementation.md) | "大功能拆成薄切片，每片编译通过+测试通过" | 3-6 |
-| **8** | [source-driven-development](./3-8-source-driven-development.md) | "用官方文档验证 AI 写的 API 是否正确" | M2 2-5（context7） |
+| **6** | [test-driven-development](./6-test-driven-development) | "测试先失败再通过——确保代码行为被验证" | 3-5 |
+| **7** | [incremental-implementation](./7-incremental-implementation) | "大功能拆成薄切片，每片编译通过+测试通过" | 3-6 |
+| **8** | [source-driven-development](./8-source-driven-development) | "用官方文档验证 AI 写的 API 是否正确" | M2 2-5（context7） |
 
 ### 阶段五：Verify（验证）—— 代码对吗？
 
 | 顺序 | Skill | 解决什么问题 | 什么时候用 |
 |------|-------|-------------|-----------|
-| **9** | [code-review-and-quality](./3-9-code-review-and-quality.md) | "提交前/审查别人代码时，AI 从 5 个维度帮你找问题" | 每次提交前、审查 PR 时 |
-| **10** | [doubt-driven-development](./3-10-doubt-driven-development.md) | "对抗审查你的代码——用全新视角找深层问题" | 代码写完、准备合并时 |
-| **11** | [debugging-and-error-recovery](./3-11-debugging-and-error-recovery.md) | "从现象到根因的系统化调试" | 代码挂了、测试失败、硬件异常时 |
+| **9** | [code-review-and-quality](./9-code-review-and-quality) | "提交前/审查别人代码时，AI 从 5 个维度帮你找问题" | 每次提交前、审查 PR 时 |
+| **10** | [doubt-driven-development](./10-doubt-driven-development) | "对抗审查你的代码——用全新视角找深层问题" | 代码写完、准备合并时 |
+| **11** | [debugging-and-error-recovery](./11-debugging-and-error-recovery) | "从现象到根因的系统化调试" | 代码挂了、测试失败、硬件异常时 |
 
 ### 阶段六：Deliver（交付）—— 方案交付
 
 | 顺序 | 页面 | 解决什么问题 | 前置依赖 |
 |------|------|-------------|---------|
-| **12** | [documentation-and-adrs](./3-12-documentation-and-adrs.md) | "生成方案文档 + 架构决策记录" | 3-3（spec 已完成） |
-| **13** | [shipping-and-launch](./3-13-shipping-and-launch.md) | "交付前检查清单 + 回滚方案" | 3-12 |
+| **12** | [documentation-and-adrs](./12-documentation-and-adrs) | "生成方案文档 + 架构决策记录" | 3-3（spec 已完成） |
+| **13** | [shipping-and-launch](./13-shipping-and-launch) | "交付前检查清单 + 回滚方案" | 3-12 |
 
 ### 环境配置（随时查阅）
 
 | 页面 | 内容 |
 |------|------|
-| [3-14-environment-setup](./3-14-environment-setup.md) | ae-skills 完整清单 + MCP 配置 + AE 补充配置 + 排查指南 |
+| [3-14-environment-setup](./14-environment-setup) | ae-skills 完整清单 + MCP 配置 + AE 补充配置 + 排查指南 |
 
 ---
 
@@ -139,6 +139,6 @@ AE 工程师的工作覆盖从"理解客户问题"到"写代码解决"到"交付
 
 ## 下一步
 
-> **开始学习：[3-1-interview-me.md](./3-1-interview-me.md)**
+> **开始学习：[3-1-interview-me.md](./1-interview-me)**
 >
 > 一切从理解需求开始——把模糊的"客户/需求方要什么"翻译成清晰的技术问题。

@@ -1,4 +1,4 @@
----
+﻿---
 title: code-review-and-quality
 ---
 
@@ -28,8 +28,8 @@ code-review-and-quality 是一个五维度代码审查流程——**正确性、
 |------|------------|---------|
 | 改了一行注释 | 不需要五维度审查 | 直接提交 |
 | 紧急 hotfix（5 分钟内要上线） | 五维度审查需要 2-5 分钟——紧急时先修再审查 | 修完后再触发审查作为事后检查 |
-| 需求/方案审查 | code-review 审代码，不是审方案 | SE 用 [design-review](../M4-SE实战/) |
-| 只想知道"这段代码能跑吗" | 你需要的是测试，不是审查 | 用 [test-driven-development](./3-6-test-driven-development.md) |
+| 需求/方案审查 | code-review 审代码，不是审方案 | SE 用 [design-review](../se-practice/) |
+| 只想知道"这段代码能跑吗" | 你需要的是测试，不是审查 | 用 [test-driven-development](./6-test-driven-development) |
 
 ---
 
@@ -218,7 +218,7 @@ AI 收到后会按五维度自动审查，输出结构化的发现列表。
 
 ### 与 doubt-driven-development 配合
 
-审查完成后，对 AI 发现的 HIGH 级问题用 [doubt-driven-development](./3-10-doubt-driven-development.md) 做对抗验证——确认这真的是个问题，不是误报。
+审查完成后，对 AI 发现的 HIGH 级问题用 [doubt-driven-development](./10-doubt-driven-development) 做对抗验证——确认这真的是个问题，不是误报。
 
 ### 提交前自查清单
 
@@ -243,6 +243,6 @@ AI 收到后会按五维度自动审查，输出结构化的发现列表。
 
 ## 下一步
 
-> **继续阅读：[3-10-doubt-driven-development.md](./3-10-doubt-driven-development.md)**
+> **继续阅读：[3-10-doubt-driven-development.md](./10-doubt-driven-development)**
 >
 > 代码审查过了，但你真的有信心吗？下一篇讲 doubt-driven——用全新视角对抗审查你的代码，找出审查可能遗漏的深层问题。

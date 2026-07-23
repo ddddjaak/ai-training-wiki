@@ -53,3 +53,7 @@ M2 建议所有人都过一遍——讲的是 Claude Code 的高级能力（skil
 请在对应页面补充或提 issue。
 
 当前版本：v26.3（2026 Q3）
+
+## 在线地址
+
+https://ddddjaak.github.io/ai-learning-system

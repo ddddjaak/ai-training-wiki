@@ -1,4 +1,4 @@
----
+﻿---
 title: spec-authoring + detailed-design（SE 场景）
 ---
 
@@ -35,9 +35,9 @@ title: spec-authoring + detailed-design（SE 场景）
 
 | 场景 | 为什么不该用 | 替代方案 |
 |------|------------|---------|
-| 架构还没确认 | 基于不稳定的架构写规格——架构改一次规格全废 | 先完成 [architecture-design](./4-2-architecture-design.md) |
+| 架构还没确认 | 基于不稳定的架构写规格——架构改一次规格全废 | 先完成 [architecture-design](./2-architecture-design) |
 | 改动很小（改一个阈值参数） | 不需要详细设计——直接改代码 | 直接在代码层面修改 |
-| 需求还有歧义 | 规格文档的需求来源不清晰——写出来也是错的 | 先完成 [requirements-decompose](./4-1-se-requirements.md) |
+| 需求还有歧义 | 规格文档的需求来源不清晰——写出来也是错的 | 先完成 [requirements-decompose](./1-se-requirements) |
 
 ---
 
@@ -238,7 +238,7 @@ T_J = T_A + P × θ_JA
 
 ### 与 design-review 配合
 
-详细设计完成 → 用 [design-review](./4-4-design-review.md) 对详细设计做审查——重点看可行性视角（参数计算是否正确、资源预算是否超限）。
+详细设计完成 → 用 [design-review](./4-design-review) 对详细设计做审查——重点看可行性视角（参数计算是否正确、资源预算是否超限）。
 
 ### 与 code-static-review 配合
 
@@ -246,12 +246,12 @@ T_J = T_A + P × θ_JA
 
 ### 与 traceability-matrix 配合
 
-详细设计中的每个模块、函数、接口 → 都应追溯到需求 ID。见 [traceability-matrix](./4-7-traceability-matrix.md)。
+详细设计中的每个模块、函数、接口 → 都应追溯到需求 ID。见 [traceability-matrix](./7-traceability-matrix)。
 
 ---
 
 ## 下一步
 
-> **继续阅读：[4-4-design-review.md](./4-4-design-review.md)**
+> **继续阅读：[4-4-design-review.md](./4-design-review)**
 >
 > 规格和详细设计完成了——系统的每个细节都已定义。但你确定这些设计没有遗漏和矛盾吗？下一篇讲 `design-review`——从 4 个视角对你的设计做对抗审查。

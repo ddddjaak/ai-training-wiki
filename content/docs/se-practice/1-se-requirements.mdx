@@ -1,4 +1,4 @@
----
+﻿---
 title: requirements-decompose（SE 场景）
 ---
 
@@ -13,8 +13,8 @@ title: requirements-decompose（SE 场景）
 
 **相关 SE skill**：
 - `requirements-decompose`：主需求分解引擎——输入高层需求，输出结构化需求集（本页）
-- `requirements-review`：需求审查——检查需求集的完整性、一致性、可验证性（见 [4-4 设计审查](./4-4-design-review.md)）
-- `spec-authoring`：规格撰写——把需求写成正式的系统规格文档（见 [4-3 规格与详细设计](./4-3-spec-and-detailed-design.md)）
+- `requirements-review`：需求审查——检查需求集的完整性、一致性、可验证性（见 [4-4 设计审查](./4-design-review)）
+- `spec-authoring`：规格撰写——把需求写成正式的系统规格文档（见 [4-3 规格与详细设计](./3-spec-and-detailed-design)）
 
 ---
 
@@ -34,7 +34,7 @@ title: requirements-decompose（SE 场景）
 | 场景 | 为什么不该用 | 替代方案 |
 |------|------------|---------|
 | 需求已经非常明确且单一（改一个 GPIO 引脚） | 需求分解的成本 > 价值 | 直接写规格：[spec-authoring] |
-| 需求是纯软件功能，不涉及系统级分解 | `requirements-decompose` 偏系统级——纯软件需求用 interview-me 足够 | [M3 interview-me](../M3-AE实战/3-4-interview-me.md) |
+| 需求是纯软件功能，不涉及系统级分解 | `requirements-decompose` 偏系统级——纯软件需求用 interview-me 足够 | [M3 interview-me](../ae-practice/1-interview-me) |
 | 还在探索阶段——需求本身还没定 | 分解基于不稳定的输入——每改一次输入就要重新分解 | 先和客户/PM 确认需求方向 |
 
 ---
@@ -339,16 +339,16 @@ AI: 好的。以下是从高层需求分解出的系统需求集：
 
 ### 与 architecture-design 配合
 
-需求确认后 → 交给 [architecture-design](./4-2-architecture-design.md) 做系统架构设计。
+需求确认后 → 交给 [architecture-design](./2-architecture-design) 做系统架构设计。
 
 ### 与 traceability-matrix 配合
 
-需求确认后 → 需求 ID 作为追溯矩阵的源头 → 见 [traceability-matrix](./4-7-traceability-matrix.md)。
+需求确认后 → 需求 ID 作为追溯矩阵的源头 → 见 [traceability-matrix](./7-traceability-matrix)。
 
 ---
 
 ## 下一步
 
-> **继续阅读：[4-2-architecture-design.md](./4-2-architecture-design.md)**
+> **继续阅读：[4-2-architecture-design.md](./2-architecture-design)**
 >
 > 需求分解搞定了——你知道系统必须做什么。但"怎么做"还没定。下一篇讲 `architecture-design`——HW/SW 分区、模块定义、接口设计。

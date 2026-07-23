@@ -68,25 +68,25 @@ title: 路径入口：SE 如何用 Claude Code
 
 | 序号 | 页面 | Skill | 为什么高频 |
 |------|------|-------|-----------|
-| 4-1 | [需求分解](./4-1-se-requirements.md) | `requirements-decompose` | 每个新项目/新功能都从需求分解开始——SE 的日常入口 |
-| 4-2 | [架构设计](./4-2-architecture-design.md) | `architecture-design` / `software-architecture-design` / `hardware-architecture-design` | 需求分解完就进入架构设计——SE 的核心产出 |
+| 4-1 | [需求分解](./1-se-requirements) | `requirements-decompose` | 每个新项目/新功能都从需求分解开始——SE 的日常入口 |
+| 4-2 | [架构设计](./2-architecture-design) | `architecture-design` / `software-architecture-design` / `hardware-architecture-design` | 需求分解完就进入架构设计——SE 的核心产出 |
 
 ### 中频（每个阶段节点用）
 
 | 序号 | 页面 | Skill | 为什么中频 |
 |------|------|-------|-----------|
-| 4-3 | [规格与详细设计](./4-3-spec-and-detailed-design.md) | `spec-authoring` / `software-detailed-design` / `hardware-detailed-design` / `algorithm-design` | 架构确认后写正式规格——项目关键交付物 |
-| 4-4 | [设计审查](./4-4-design-review.md) | `design-review` / `requirements-review` | 规格完成后审查——项目关键质量门禁 |
-| 4-5 | [编码规范审查](./4-5-code-static-review.md) | `code-static-review` | 代码提交后审查编码规范——持续但按批次触发 |
-| 4-6 | [测试审查](./4-6-test-review.md) | `test-plan-review` / `test-report-review` | 测试方案和报告的正式审查——验证阶段门禁 |
+| 4-3 | [规格与详细设计](./3-spec-and-detailed-design) | `spec-authoring` / `software-detailed-design` / `hardware-detailed-design` / `algorithm-design` | 架构确认后写正式规格——项目关键交付物 |
+| 4-4 | [设计审查](./4-design-review) | `design-review` / `requirements-review` | 规格完成后审查——项目关键质量门禁 |
+| 4-5 | [编码规范审查](./5-code-static-review) | `code-static-review` | 代码提交后审查编码规范——持续但按批次触发 |
+| 4-6 | [测试审查](./6-test-review) | `test-plan-review` / `test-report-review` | 测试方案和报告的正式审查——验证阶段门禁 |
 
 ### 低频（里程碑节点用）
 
 | 序号 | 页面 | Skill | 为什么低频 |
 |------|------|-------|-----------|
-| 4-7 | [追溯矩阵](./4-7-traceability-matrix.md) | `traceability-matrix` | 需求→设计→测试追溯——评审节点或交付前触发 |
-| 4-8 | [发布审查](./4-8-release-review.md) | `release-review` | 发布前最终质量门禁——每个 release 一次 |
-| 4-9 | [SE Goal Mode](./4-9-se-goal.md) | `/se-goal`（Goal Mode） | 全自动 SE 流程——信任流程时使用 |
+| 4-7 | [追溯矩阵](./7-traceability-matrix) | `traceability-matrix` | 需求→设计→测试追溯——评审节点或交付前触发 |
+| 4-8 | [发布审查](./8-release-review) | `release-review` | 发布前最终质量门禁——每个 release 一次 |
+| 4-9 | [SE Goal Mode](./9-se-goal) | `/se-goal`（Goal Mode） | 全自动 SE 流程——信任流程时使用 |
 
 ### 元技能（不知道该用哪个 skill 时）
 
@@ -98,7 +98,7 @@ title: 路径入口：SE 如何用 Claude Code
 
 | 序号 | 页面 | 内容 |
 |------|------|------|
-| 4-10 | [环境配置详解](./4-10-环境配置详解.md) | SE 角色的 skill/MCP 清单 + 排查步骤 |
+| 4-10 | [环境配置详解](./10-environment-setup) | SE 角色的 skill/MCP 清单 + 排查步骤 |
 
 ---
 
@@ -154,7 +154,7 @@ se-skills 支持两种模式：
 | **跟你互动** | 每阶段都问 | 只在真卡住时或完成时 |
 | **适用场景** | 你想一步步把控 | 你信任流程，想省时间 |
 
-详见 [4-9 SE Goal Mode](./4-9-se-goal.md)。
+详见 [4-9 SE Goal Mode](./9-se-goal)。
 
 ---
 
@@ -190,12 +190,12 @@ se-skills 支持两种模式：
 - **如果你是嵌入式/AE 想了解 SE 工作流**：建议先学 M3（AE实战）建立日常使用习惯，再学 M4 建立系统级视角
 - **如果你已经是 SE**：按页面顺序阅读（4-1 → 4-2 → ... → 4-10），每个页面 15-20 分钟。案例是统一的 OTP 子系统
 - **如果你想快速了解某个 skill**：直接跳到对应页面——每页都是独立可读的
-- **如果你想一次性跑完全流程**：看 [4-9 SE Goal Mode](./4-9-se-goal.md)
+- **如果你想一次性跑完全流程**：看 [4-9 SE Goal Mode](./9-se-goal)
 
 ---
 
 ## 下一步
 
-> **开始阅读：[4-1-se-requirements.md](./4-1-se-requirements.md)**
+> **开始阅读：[4-1-se-requirements.md](./1-se-requirements)**
 >
 > SE 的入口是需求分解。客户说"我要一个过温保护功能"——你怎么把这个一句话需求变成十几条可验证的系统需求？下一篇讲用 `requirements-decompose` 做需求分解。

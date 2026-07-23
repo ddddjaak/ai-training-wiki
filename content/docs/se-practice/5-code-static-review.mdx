@@ -1,4 +1,4 @@
----
+﻿---
 title: code-static-review（SE 场景）
 ---
 
@@ -10,7 +10,7 @@ code-static-review 是一个**编码规范合规审查引擎**——它对照指
 > **类比**：功能测试检查"这辆车能开吗"——刹车、油门、转向正常。code-static-review 检查"这辆车的零件符合规格吗"——每个螺丝的扭矩是否正确、焊点是否达标、线束是否绑扎规范。螺丝扭矩不达标今天可能不会出问题——但在颠簸路上行驶 10000 公里后就会松脱。
 
 **和 M3 code-review 的区别**：
-- M3 的 [code-review-and-quality](../M3-AE实战/3-2-code-review-and-quality.md)：5 轴审查（正确性+可读性+架构+安全+性能）——关注代码的功能和质量
+- M3 的 [code-review-and-quality](../ae-practice/9-code-review-and-quality)：5 轴审查（正确性+可读性+架构+安全+性能）——关注代码的功能和质量
 - M4 的 code-static-review：**仅关注编码规范的合规性**——不关注功能是否正确。这是 SE 视角：代码是否遵守了组织定义的编码标准
 
 **相关 SE skill**：
@@ -36,7 +36,7 @@ code-static-review 是一个**编码规范合规审查引擎**——它对照指
 |------|------------|---------|
 | 代码还在频繁修改中（草稿阶段） | 每改一次就审一次规范——浪费。等内容基本稳定后再审 | 完成功能逻辑后再触发审查 |
 | 代码是自动生成的（CubeMX 生成代码） | 自动生成代码不需要审查编码规范（生成器本身应保证合规） | 只审查手写代码部分 |
-| 需要在审查中同时评估代码逻辑正确性 | code-static-review 只看规范——不看逻辑是否正确 | 用 M3 [code-review](../M3-AE实战/3-2-code-review-and-quality.md) |
+| 需要在审查中同时评估代码逻辑正确性 | code-static-review 只看规范——不看逻辑是否正确 | 用 M3 [code-review](../ae-practice/9-code-review-and-quality) |
 
 ---
 
@@ -415,6 +415,6 @@ int16_t maxTempSeen;        // 应为 max_temp_seen
 
 ## 下一步
 
-> **继续阅读：[4-6-test-review.md](./4-6-test-review.md)**
+> **继续阅读：[4-6-test-review.md](./6-test-review)**
 >
 > 编码规范审查通过了。但 SE 还需要确认测试方案和测试报告的质量。下一篇讲 `test-plan-review` 和 `test-report-review`——测试审查。

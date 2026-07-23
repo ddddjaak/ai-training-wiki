@@ -11,14 +11,22 @@ The master planning document is `ai-training-wiki-for-chip-engineers.md` — it 
 ## Repository structure
 
 ```
-ai_propsal/
-├── ai-training-wiki-for-chip-engineers.md   ← Master planning doc (read-only reference)
-├── M1-快速上手/           ← Module 1: Tool basics (9 pages)
-├── M2-能力扩展/           ← Module 2: Value extraction (15 pages)
-├── M3-AE实战/             ← Module 3: AE practical (15 pages, powered by ae-skills plugin)
-├── M4-SE实战/             ← Module 4: SE practical (11 pages, powered by se-skills plugin)
-├── Skills-Plugins/        ← Skills & plugins reference (overviews, versions, storage)
-└── 经验之谈/              ← AI usage methodologies & lessons learned
+ai-learning-system/
+├── app/                          # Next.js App Router
+│   ├── (home)/                   # Landing page
+│   ├── docs/                     # Documentation catch-all route
+│   ├── not-found.tsx             # Custom 404 page
+│   └── global.css                # Theme + custom styles
+├── content/docs/                 # MDX documentation source
+│   ├── getting-started/          # M1: Tool basics (9 pages)
+│   ├── capabilities/             # M2: Value extraction (15 pages)
+│   ├── ae-practice/              # M3: AE practical (15 pages)
+│   ├── se-practice/              # M4: SE practical (12 pages)
+│   └── index.mdx                 # Docs landing page
+├── components/                   # Shared React components
+├── scripts/                      # Build scripts (search index, params)
+├── public/                       # Static assets
+└── .github/workflows/deploy.yml  # GitHub Pages deployment
 ```
 
 ## Current scope
@@ -136,20 +144,21 @@ git config --global http.proxy
 
 If the push fails with "Failed to connect to github.com port 443", the proxy isn't set or isn't running — re-run the config commands above and make sure the proxy client is active.
 
-### MkDocs deployment
+### Next.js + Fumadocs deployment
 
-The wiki uses **MkDocs Material** for building and **GitHub Actions** for auto-deployment to GitHub Pages.
+The wiki uses **Next.js** with **Fumadocs** for building and **GitHub Actions** for auto-deployment to GitHub Pages.
 
-- `mkdocs build` — build the static site to `site/`
-- `mkdocs serve` — local preview at http://127.0.0.1:8000
-- Push to `main` → GitHub Actions auto-deploys to `ddddjaak.github.io/ai-training-wiki`
+- `npm run dev` — local preview at http://127.0.0.1:3000
+- `npm run build` — build static export to `out/`
+- Push to `main` → GitHub Actions auto-deploys to `ddddjaak.github.io/ai-learning-system`
 - Pages source must be set to **GitHub Actions** in repo Settings → Pages
 
 ## File naming conventions
 
-- Module directories: `MX-角色名/` (e.g., `M1-快速上手/`)
-- Page files: `X-N-页面名.md` (e.g., `1-2-基础对话.md`, `3-5-test-driven-development.md`)
-- Module README: `README.md` inside each module directory (learning path index)
+- Module directories: `content/docs/模块名/` (e.g., `content/docs/getting-started/`)
+- Page files: `X-页面名.mdx` (e.g., `1-interview-me.mdx`, `6-test-driven-development.mdx`)
+- Module index: `index.mdx` inside each module directory (landing page)
+- Navigation config: `meta.json` inside each module directory
 
 ## Versioning
 

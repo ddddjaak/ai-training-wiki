@@ -76,29 +76,29 @@ title: 环境配置详解
 
 | Skill | 触发方式 | 解决什么问题 | 对应页面 |
 |-------|---------|-------------|---------|
-| **interview-me** | 描述模糊需求，AI 自动进入 Q&A | 澄清模糊需求 | [3-1](./3-1-interview-me.md) |
-| **idea-refine** | "帮我精炼这个想法" | 模糊想法 → 结构化方向 | [3-2](./3-2-idea-refine.md) |
-| **spec-driven-development**（别名 `spec`） | "先写规格再实现 XX" | 先规格后实现 | [3-3](./3-3-spec-driven-development.md) |
+| **interview-me** | 描述模糊需求，AI 自动进入 Q&A | 澄清模糊需求 | [3-1](./1-interview-me) |
+| **idea-refine** | "帮我精炼这个想法" | 模糊想法 → 结构化方向 | [3-2](./2-idea-refine) |
+| **spec-driven-development**（别名 `spec`） | "先写规格再实现 XX" | 先规格后实现 | [3-3](./3-spec-driven-development) |
 
 ### Plan（规划）
 
 | Skill | 触发方式 | 解决什么问题 | 对应页面 |
 |-------|---------|-------------|---------|
-| **planning-and-task-breakdown**（别名 `plan`） | "帮我拆解 XX 任务" | 任务拆解 + 依赖排序 | [3-4](./3-4-planning-and-task-breakdown.md) |
+| **planning-and-task-breakdown**（别名 `plan`） | "帮我拆解 XX 任务" | 任务拆解 + 依赖排序 | [3-4](./4-planning-and-task-breakdown) |
 
 ### Context（上下文）
 
 | Skill | 触发方式 | 解决什么问题 | 对应页面 |
 |-------|---------|-------------|---------|
-| **context-engineering** | 配置 CLAUDE.md + codegraph | 加载项目上下文 | [3-5](./3-5-context-engineering.md) |
+| **context-engineering** | 配置 CLAUDE.md + codegraph | 加载项目上下文 | [3-5](./5-context-engineering) |
 
 ### Implement（实现）
 
 | Skill | 触发方式 | 解决什么问题 | 对应页面 |
 |-------|---------|-------------|---------|
-| **test-driven-development**（别名 `test`） | "用 TDD 实现 XX 功能" | 测试先行 | [3-6](./3-6-test-driven-development.md) |
-| **incremental-implementation**（别名 `build`） | "用增量方式实现 XX" | 薄切片逐步实现 | [3-7](./3-7-incremental-implementation.md) |
-| **source-driven-development** | 引用第三方库 API 时自动触发 | 查官方文档确认 API | [3-8](./3-8-source-driven-development.md) |
+| **test-driven-development**（别名 `test`） | "用 TDD 实现 XX 功能" | 测试先行 | [3-6](./6-test-driven-development) |
+| **incremental-implementation**（别名 `build`） | "用增量方式实现 XX" | 薄切片逐步实现 | [3-7](./7-incremental-implementation) |
+| **source-driven-development** | 引用第三方库 API 时自动触发 | 查官方文档确认 API | [3-8](./8-source-driven-development) |
 | **peripheral-driver-design** | "帮我设计 XX 外设的驱动" | I2C/SPI/UART/GPIO 驱动设计 | —（暂无独立页面） |
 | **embedded-build-and-toolchain** | "配置这个项目的交叉编译工具链" | 链接脚本、CMake 多目标构建 | —（暂无独立页面） |
 
@@ -106,9 +106,9 @@ title: 环境配置详解
 
 | Skill | 触发方式 | 解决什么问题 | 对应页面 |
 |-------|---------|-------------|---------|
-| **code-review-and-quality**（别名 `review`） | "审查 XX 文件的代码质量" | 五维度代码审查 | [3-9](./3-9-code-review-and-quality.md) |
-| **doubt-driven-development** | "用 doubt 审查 XX" | 对抗式代码审查 | [3-10](./3-10-doubt-driven-development.md) |
-| **debugging-and-error-recovery** | 描述 bug 现象，AI 自动触发 | 从现象定位到根因 | [3-11](./3-11-debugging-and-error-recovery.md) |
+| **code-review-and-quality**（别名 `review`） | "审查 XX 文件的代码质量" | 五维度代码审查 | [3-9](./9-code-review-and-quality) |
+| **doubt-driven-development** | "用 doubt 审查 XX" | 对抗式代码审查 | [3-10](./10-doubt-driven-development) |
+| **debugging-and-error-recovery** | 描述 bug 现象，AI 自动触发 | 从现象定位到根因 | [3-11](./11-debugging-and-error-recovery) |
 | **embedded-debugging** | "分析这个 HardFault" | 硬件级调试：HardFault/JTAG/SWD/栈溢出 | —（暂无独立页面） |
 | **performance-optimization** | "分析这个函数的栈/堆使用" | 栈/堆分析、中断延迟、功耗优化 | —（暂无独立页面） |
 
@@ -191,8 +191,8 @@ title: 环境配置详解
 
 | Skill | 用途 | 触发方式 | 对应页面 |
 |-------|------|---------|---------|
-| `documentation-and-adrs` | 生成方案文档 + 架构决策记录 | "基于规格生成方案文档 + ADR" | [3-12](./3-12-documentation-and-adrs.md) |
-| `shipping-and-launch` | 交付前清单检查 | "帮我做方案交付前的 shipping 检查" | [3-13](./3-13-shipping-and-launch.md) |
+| `documentation-and-adrs` | 生成方案文档 + 架构决策记录 | "基于规格生成方案文档 + ADR" | [3-12](./12-documentation-and-adrs) |
+| `shipping-and-launch` | 交付前清单检查 | "帮我做方案交付前的 shipping 检查" | [3-13](./13-shipping-and-launch) |
 
 ### CLAUDE.md 建议
 
@@ -232,6 +232,6 @@ title: 环境配置详解
 
 ## 下一步
 
-> **返回：[路径入口](./3-0-pathway-entry.md)**
+> **返回：[路径入口](./0-pathway-entry)**
 >
-> 或继续学习其他模块：[M4-SE实战](../M4-SE实战/)（SE 系统工程师路径）。
+> 或继续学习其他模块：[M4-SE实战](../se-practice/)（SE 系统工程师路径）。

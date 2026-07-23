@@ -1,4 +1,4 @@
----
+﻿---
 title: spec-driven-development
 ---
 
@@ -26,9 +26,9 @@ spec-driven-development 是一个先写规格再实现的纪律——**在写代
 
 | 场景 | 为什么不该用 | 替代方案 |
 |------|------------|---------|
-| 修复一个已知的明确 bug | bug 的"规格"就是"修复后这个问题不再出现"——不需要额外写规格 | [debugging-and-error-recovery](./3-11-debugging-and-error-recovery.md) |
+| 修复一个已知的明确 bug | bug 的"规格"就是"修复后这个问题不再出现"——不需要额外写规格 | [debugging-and-error-recovery](./11-debugging-and-error-recovery) |
 | 5 行以内的简单函数 | 写规格的时间超过写代码的时间 | 直接实现 + 测试 |
-| 探索性原型——还不确定要什么 | 规格需要确定的输入/输出/约束，原型阶段还不清楚 | [incremental-implementation](./3-7-incremental-implementation.md) |
+| 探索性原型——还不确定要什么 | 规格需要确定的输入/输出/约束，原型阶段还不清楚 | [incremental-implementation](./7-incremental-implementation) |
 
 ---
 
@@ -205,7 +205,7 @@ AI: 好，已更新规格并实现。
 
 ### 与 interview-me 配合
 
-如果需求本身还不够清晰，先用 [interview-me](./3-1-interview-me.md) 澄清需求，产出清晰的描述 → 再用 spec-driven 把描述变成可验收的规格 → 再实现。
+如果需求本身还不够清晰，先用 [interview-me](./1-interview-me) 澄清需求，产出清晰的描述 → 再用 spec-driven 把描述变成可验收的规格 → 再实现。
 
 ### 与 TDD 配合
 
@@ -244,6 +244,6 @@ AI: 好，已更新规格并实现。
 
 ## 下一步
 
-> **继续阅读：[3-4-planning-and-task-breakdown.md](./3-4-planning-and-task-breakdown.md)**
+> **继续阅读：[3-4-planning-and-task-breakdown.md](./4-planning-and-task-breakdown)**
 >
 > 规格写好了，但怎么拆成可执行的任务？下一篇讲 planning——把中型任务拆成子任务，每个有明确的验收条件和依赖关系。
